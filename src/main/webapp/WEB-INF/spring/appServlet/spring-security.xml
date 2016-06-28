@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bean:beans
+        xmlns:bean="http://www.springframework.org/schema/beans"
+        xmlns:sec="http://www.springframework.org/schema/security"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/security"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	                         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--
+    Applies to root appContext beans only, for MVC Controllers is this declaration repeated in MVC config.
+    Actually, we currently don't need this as we have on annotation outside of MVC.
+    There is more here that can go wrong. If you use interface-based proxy (our demo uses CGLib), you may
+    need to add proxy-target-class="true" as well. Book "Spring Security 3.1", Chapter 10, Fine-grained
+    Access Control, from header "Method security on Spring MVC controllers" on discusses these topics.
+    -->
+    <global-method-security secured-annotations="enabled" />
+
+    <http auto-config="true" use-expressions="true" disable-url-rewriting="false" realm="access permission is required.">
+        <csrf disabled="true"/>
+        <intercept-url pattern="/app/**" access="permitAll"/>
+        <intercept-url pattern="/web/**" access="permitAll"/>
+        <!--<intercept-url pattern="/app/web/**" access="hasRole('ROLE_AUTHENTICATION')"  />-->
+        <sec:http-basic />
+    </http>
+
+
+    <authentication-manager>
+        <authentication-provider  >
+            <sec:user-service>
+                <sec:user name="SAGIP"  password="SAGIP0000" authorities="ROLE_AUTHENTICATION"/>
+            </sec:user-service>
+        </authentication-provider>
+    </authentication-manager>
+
+
+</bean:beans>
