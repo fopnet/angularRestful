@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="SpringSecurityCustomAuthenticationProvider:war">
+    <output-path>$PROJECT_DIR$/../SpringSecurityCustomAuthenticationProvider/target</output-path>
+    <root id="archive" name="SpringSecurityHelloWorldCustomLogin.war">
+      <element id="artifact" artifact-name="SpringSecurityCustomAuthenticationProvider:war exploded" />
+    </root>
+  </artifact>
+</component>

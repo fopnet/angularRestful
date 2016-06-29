@@ -5,12 +5,14 @@
   </component>
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$" />
+    <file type="web" url="file://$PROJECT_DIR$/../SpringSecurityCustomAuthenticationProvider" />
   </component>
   <component name="IdProvider" IDEtalkID="7EF9F3CDA19879E6D75E87B4AB08C4B4" />
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/../SpringSecurityCustomAuthenticationProvider/pom.xml" />
       </list>
     </option>
   </component>

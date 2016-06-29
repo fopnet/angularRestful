@@ -7,9 +7,10 @@ import ngdemo.domain.Journal;
 import ngdemo.domain.Subscription;
 import ngdemo.domain.User;
 import ngdemo.repositories.contract.JournalRepository;
-import ngdemo.service.contract.JournalService;
-import ngdemo.service.contract.SubscriptionRepository;
+import ngdemo.repositories.contract.SubscriptionRepository;
 import ngdemo.service.contract.SubscriptionService;
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections4.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +21,40 @@ import java.util.List;
 public class SubscriptionServiceImpl implements SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;
+    private final JournalRepository journalRepository;
 
 //    @Inject
     @Autowired
-    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository) {
+    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository, JournalRepository journalRepository) {
         this.subscriptionRepository = subscriptionRepository;
+        this.journalRepository = journalRepository;
     }
 
     @Override
-    public List<Subscription> getAllBySubscriber(User subscriber) {
-        return null;
+    public List<Subscription> getAllBySubscriber(User subscriber, boolean isOnlySubscribed) {
+        List<Subscription> subscriptions = subscriptionRepository.getAll();
+        Predicate<Subscription> predicate = null;
+
+        if (isOnlySubscribed) {
+
+            predicate = new Predicate<Subscription>() {
+                @Override
+                public boolean evaluate(Subscription item) {
+                    return item.equals(subscriber);
+                }
+            };
+
+        } else {
+
+            predicate = new Predicate<Subscription>() {
+                @Override
+                public boolean evaluate(Subscription item) {
+                    return  item.getSubscriber() == null || item.equals(subscriber) ;
+                }
+            };
+
+        }
+        return ListUtils.select(subscriptions, predicate);
     }
 
     @Override

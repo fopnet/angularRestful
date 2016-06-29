@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SubscriptionService {
 
-    List<Subscription> getAllBySubscriber(User subscriber) ;
+    List<Subscription> getAllBySubscriber(User subscriber, boolean isOnlySubscribed) ;
 
     Subscription subscribe(Journal journal, User subscriber);
 

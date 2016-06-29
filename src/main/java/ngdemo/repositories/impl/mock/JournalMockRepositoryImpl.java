@@ -19,10 +19,10 @@ public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> im
 
     private List<Journal> journals = new ArrayList<Journal>();
 
-    @Autowired
     private UserRepository userRepository;
 
-    public JournalMockRepositoryImpl() {
+    public JournalMockRepositoryImpl(final UserRepository userRepository) {
+        this.userRepository = userRepository;
         this.journals = this.createJournals();
     }
 
@@ -72,7 +72,7 @@ public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> im
         List<User> users =   userRepository.getAll();
 
         for (long i = 0; i < numberOfJournals; i++) {
-            int randomIdx = new Random().nextInt((users.size()-1) + 1) + 1;
+            int randomIdx = new Random().nextInt((users.size()-1) + 1) ;
 
             Journal journal = new Journal();
             journal.setId(i + 1);

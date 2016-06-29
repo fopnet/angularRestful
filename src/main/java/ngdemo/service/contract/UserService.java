@@ -17,4 +17,6 @@ public interface UserService {
     User remove(Long id);
 
     int getNumberOfUsers();
+
+    User login(User user);
 }

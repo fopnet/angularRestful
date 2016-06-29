@@ -5,7 +5,12 @@
     <deployment>
       <artifact name="ngdemo:war exploded">
         <settings>
-          <option name="CONTEXT_PATH" value="/" />
+          <option name="CONTEXT_PATH" value="/ngdemo" />
+        </settings>
+      </artifact>
+      <artifact name="SpringSecurityCustomAuthenticationProvider:war exploded">
+        <settings>
+          <option name="CONTEXT_PATH" value="/springSecurity" />
         </settings>
       </artifact>
     </deployment>
@@ -75,6 +80,7 @@
     <method>
       <option name="BuildArtifacts" enabled="true">
         <artifact name="ngdemo:war exploded" />
+        <artifact name="SpringSecurityCustomAuthenticationProvider:war exploded" />
       </option>
     </method>
   </configuration>

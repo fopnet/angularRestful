@@ -1,16 +1,16 @@
 <div class="container">
-  <h1>Create a new subscriber</h1>
+  <h1>Create a new user</h1>
 
   <form class="col-md-4" novalidate="novalidate" name="userForm">
     <fieldset class="form-group">
       <label class="control-label" for="inputFirstName">First name:</label>
-      <input type="text" name="name" id="inputFirstName" ng-model="subscriber.firstName" placeholder="First name" class="form-control" required/>
+      <input type="text" name="name" id="inputFirstName" ng-model="user.firstName" placeholder="First name" class="form-control" required/>
       <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">
     </fieldset>
 
     <fieldset class="form-group">
       <label class="control-label" for="inputLastName">Last name:</label>
-      <input type="text" name="lastName" id="inputLastName" ng-model="subscriber.lastName" placeholder="Last name" class="form-control" required/>
+      <input type="text" name="lastName" id="inputLastName" ng-model="user.lastName" placeholder="Last name" class="form-control" required/>
       <p ng-show="userForm.lastName.$invalid && !userForm.lastName.$pristine" class="help-block">
     </fieldset>
 
@@ -18,7 +18,7 @@
         <a ng-click="createNewUser()"
            ng-class="{disabled: userForm.$invalid}"
 
-           class="btn btn-small btn-primary">create new subscriber</a>
+           class="btn btn-small btn-primary">create new user</a>
     </fieldset>
 
   </form>

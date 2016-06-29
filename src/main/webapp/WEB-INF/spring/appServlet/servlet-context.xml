@@ -29,6 +29,20 @@
 
     <bean id="userDAO" class="ngdemo.repositories.impl.mock.UserMockRepositoryImpl" />
     <bean id="dummyRepository" class="ngdemo.repositories.impl.mock.DummyMockRepositoryImpl" />
+    <bean id="subscriptionDAO" class="ngdemo.repositories.impl.mock.SubscriptionMockRepositoryImpl" />
+    <bean id="journalDAO" class="ngdemo.repositories.impl.mock.JournalMockRepositoryImpl">
+        <constructor-arg ref="userDAO"/>
+    </bean>
+
+    <!-- Services -->
+    <bean id="subscriptionService" class="ngdemo.service.impl.SubscriptionServiceImpl">
+        <constructor-arg ref="subscriptionDAO"/>
+        <constructor-arg ref="journalDAO"/>
+    </bean>
+
+    <bean id="journalService" class="ngdemo.service.impl.JournalServiceImpl">
+        <constructor-arg ref="journalDAO"/>
+    </bean>
 
     <bean id="dummyService" class="ngdemo.service.impl.DummyServiceImpl" >
         <constructor-arg ref="dummyRepository"/>

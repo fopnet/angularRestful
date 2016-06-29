@@ -4,8 +4,6 @@ package ngdemo.service.impl;
 //import com.google.inject.Singleton;
 
 import ngdemo.domain.Journal;
-import ngdemo.domain.Subscription;
-import ngdemo.domain.User;
 import ngdemo.repositories.contract.JournalRepository;
 import ngdemo.service.contract.JournalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +12,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 //@Singleton
-@Service("userService")
-public class JounralServiceImpl implements JournalService {
+@Service("journalService")
+public class JournalServiceImpl implements JournalService {
 
     private final JournalRepository journalRepository;
 
 //    @Inject
     @Autowired
-    public JounralServiceImpl(JournalRepository userRepository) {
-        this.journalRepository = userRepository;
+    public JournalServiceImpl(JournalRepository repository) {
+        this.journalRepository = repository;
     }
 
     @Override
