@@ -7,6 +7,8 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -29,6 +31,8 @@ public class Profile {
 
     @Column(name = "NAME",length = 100)
     @NotNull
+    @NotEmpty
+    @Length(max = 100)
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = javax.persistence.CascadeType.ALL)

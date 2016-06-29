@@ -4,6 +4,8 @@ package ngdemo.domain;
 import com.google.common.base.Strings;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,14 +26,19 @@ public class Journal {
 
     @Column(name = "SUBJECT",length = 100)
     @NotNull
+    @NotEmpty
+    @Length(max = 100)
     private String subject;
 
     @Column(name = "FILEPATH",length = 400)
     @NotNull
+    @NotEmpty
+    @Length(max = 100)
     private String filePath;
 
     @ManyToOne
     @JoinColumn(name="USERID")
+    @NotNull
     private User publisher;
 
     public Long getId() {

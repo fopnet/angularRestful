@@ -3,6 +3,7 @@ package ngdemo.domain;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
@@ -25,10 +26,12 @@ public class Subscription {
 
     @ManyToOne
     @JoinColumn(name="JOURNALID")
+    @NotNull
     private Journal journal;
 
     @ManyToOne
     @JoinColumn(name="USERID")
+    @NotNull
     private User subscriber;
 
     @Column(name = "date")

@@ -4,6 +4,8 @@ import com.google.common.base.Strings;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.*;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
@@ -28,14 +30,22 @@ public class User {
     private Long id;
 
     @Column(name = "FIRSTNAME")
+    @NotEmpty
+    @Length(max = 100)
     private String firstName;
 
     @Column(name = "LASTNAME")
+    @NotEmpty
+    @Length(max = 100)
     private String lastName;
 
     @Column(name = "PASSWORD")
+    @NotEmpty
+    @Length(max = 10)
     private String password;
 
+    @NotEmpty
+    @Length(max = 100)
     @Column(name = "EMAIL",length = 100)
     @NotNull
     private String email;
