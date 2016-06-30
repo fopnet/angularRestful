@@ -4,12 +4,18 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
 import ngdemo.domain.NullUser;
+import ngdemo.domain.Profile;
+import ngdemo.domain.ProfileType;
 import ngdemo.domain.User;
 import ngdemo.repositories.contract.UserRepository;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import javax.management.RuntimeOperationsException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +63,7 @@ public class UserMockRepositoryImpl extends GenericMockRepository<User> implemen
     @Override
     public User create(User user) {
         user.setId(getCurrentMaxId() + 1);
+        user.setProfile(ProfileType.getById(user.getId()).toProfile());
         this.users.add(user);
         return user;
     }
@@ -66,13 +73,18 @@ public class UserMockRepositoryImpl extends GenericMockRepository<User> implemen
         User byId = this.getById(user.getId());
         byId.setFirstName(user.getFirstName());
         byId.setLastName(user.getLastName());
+        byId.setProfile(ProfileType.getById(user.getId()).toProfile());
+        byId.setPassword(user.getPassword());
+        byId.setEmail(user.getEmail());
         return byId;
     }
 
     @Override
     public User remove(Long id) {
         User byId = this.getById(id);
-        this.users.remove(byId);
+        if (!this.users.remove(byId)) {
+            throw new RuntimeOperationsException(null, "Could not found the item");
+        }
         return byId;
     }
 
@@ -83,11 +95,17 @@ public class UserMockRepositoryImpl extends GenericMockRepository<User> implemen
 
     private List<User> createUsers() {
         int numberOfUsers = 10;
+        Profile publc = ProfileType.PUBLIC.toProfile();
+        Profile publisher = ProfileType.PUBLISHER.toProfile();
+
         for (long i = 0; i < numberOfUsers; i++) {
             User user = new User();
             user.setId(i + 1);
-            user.setFirstName("Foo" + (i + 1));
-            user.setLastName("Bar" + (i + 1));
+            user.setFirstName("User" + (i + 1));
+            user.setLastName("Surname" + (i + 1));
+            user.setPassword(RandomStringUtils.randomAlphanumeric(10));
+            user.setEmail("abc@example.com");
+            user.setProfile( i % 2 == 0 ? publc : publisher) ;
             this.users.add(user);
         }
         return this.users;

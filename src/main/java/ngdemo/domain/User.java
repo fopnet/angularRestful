@@ -13,9 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @XmlRootElement
@@ -50,12 +48,10 @@ public class User {
     @NotNull
     private String email;
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name="PERMISSION_PROFILE",
-            joinColumns={@JoinColumn(name="USERID",
-                    referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="PROFILEID",
-                    referencedColumnName="id")})
+            joinColumns={@JoinColumn(name="USERID", referencedColumnName="id")},
+            inverseJoinColumns={@JoinColumn(name="PROFILEID", referencedColumnName="id")})
     private Profile profile;
 
     @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
@@ -97,12 +93,15 @@ public class User {
         this.id = id;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinTable(name="PERMISSION_PROFILE",
-            joinColumns={@JoinColumn(name="USERID", referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="PROFILEID", referencedColumnName="id")})
     public Profile getProfile() {
+        if (profile == null) {
+            profile = new Profile();
+        }
         return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     public String getPassword() {
@@ -120,10 +119,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
-//    public void setProfile(Profile profile) {
-//        this.profile = profile;
-//    }
 
     public Set<Subscription> getSubscriptions() {
         return subscriptions;
@@ -149,17 +144,17 @@ public class User {
             return false;
         }
         User other  = (User) o;
-        EqualsBuilder builder = new EqualsBuilder();
-        EqualsBuilder append = builder.append(Strings.nullToEmpty(getEmail()).toLowerCase(),
-                                              Strings.nullToEmpty(other.getEmail()).toLowerCase());
-        return builder.isEquals();
+        return new EqualsBuilder()
+                    .append(Strings.nullToEmpty(getEmail()).toLowerCase(),
+                            Strings.nullToEmpty(other.getEmail()).toLowerCase())
+                    .isEquals();
     }
 
     @Override
     public int hashCode() {
-        HashCodeBuilder builder = new HashCodeBuilder();
-        builder.append(Strings.nullToEmpty( getEmail() ).toLowerCase());
-        return builder.toHashCode();
+        return new HashCodeBuilder()
+                .append(Strings.nullToEmpty( getEmail() ).toLowerCase())
+                .toHashCode();
     }
 
 }

@@ -23,12 +23,29 @@
         <sec:http-basic />
     </http>
 
+<!--
+
+    <http use-expressions="true">
+        <intercept-url pattern="/**" access="authenticated"/>
+        <logout
+                logout-success-url="/login?logout"
+                logout-url="/logout"
+                />
+        <form-login
+                authentication-failure-url="/login?error"
+                login-page="/login"
+                login-processing-url="/login"
+                password-parameter="password"
+                username-parameter="username"
+                />
+    </http>
+-->
 
     <authentication-manager>
-        <authentication-provider  >
-            <sec:user-service>
-                <sec:user name="SAGIP"  password="SAGIP0000" authorities="ROLE_AUTHENTICATION"/>
-            </sec:user-service>
+        <authentication-provider>
+            <user-service>
+                <user name="admin" password="admin" authorities="ROLE_USER"/>
+            </user-service>
         </authentication-provider>
     </authentication-manager>
 

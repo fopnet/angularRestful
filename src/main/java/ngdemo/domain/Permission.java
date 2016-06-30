@@ -58,21 +58,21 @@ public class Permission {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof User)) {
+        if (!(o instanceof Permission)) {
             return false;
         }
         Permission other  = (Permission) o;
-        EqualsBuilder builder = new EqualsBuilder();
-        EqualsBuilder append = builder.append(  Strings.nullToEmpty(getName()).toLowerCase(),
-                Strings.nullToEmpty(other.getName()).toLowerCase());
-        return builder.isEquals();
+        return new EqualsBuilder()
+                .append(Strings.nullToEmpty(getName()).toLowerCase(),
+                        Strings.nullToEmpty(other.getName()).toLowerCase())
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        HashCodeBuilder builder = new HashCodeBuilder();
-        builder.append(Strings.nullToEmpty( getName() ).toLowerCase());
-        return builder.toHashCode();
+        return new HashCodeBuilder()
+                .append(Strings.nullToEmpty( getName() ).toLowerCase())
+                .toHashCode();
     }
 
 }

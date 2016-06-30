@@ -1,6 +1,7 @@
 package ngdemo.infrastructure;
 
-import org.springframework.web.WebApplicationInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -8,7 +9,6 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 /**
@@ -21,7 +21,7 @@ public class GipWebInitializer /*implements WebApplicationInitializer*/ {
         // Create the 'root' Spring application context
         AnnotationConfigWebApplicationContext rootContext =
                 new AnnotationConfigWebApplicationContext();
-        rootContext.register(GipSpringConfig.class);
+        rootContext.register(SpringConfig.class);
 
         // Manage the lifecycle of the root application context
         container.addListener(new ContextLoaderListener(rootContext));
@@ -29,19 +29,20 @@ public class GipWebInitializer /*implements WebApplicationInitializer*/ {
         // Create the dispatcher servlet's Spring application context
 //        AnnotationConfigWebApplicationContext dispatcherContext =
 //                new AnnotationConfigWebApplicationContext();
-//        dispatcherContext.register(DispatcherConfig.class);
+//        dispatcherContext.register(SpringConfig.class);
 
         XmlWebApplicationContext appContext = new XmlWebApplicationContext();
-        appContext.setConfigLocation("WEB-INF/spring/appServlet/applicationTestContext.xml");
+        appContext.setConfigLocation("WEB-INF/spring/appServlet/spring-context.xml");
 
         ServletRegistration.Dynamic dispatcher =
                 container.addServlet("dispatcher", new DispatcherServlet(appContext));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
     }
-*/
 
-/*//    @Override
+ */
+
+/*  @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         WebApplicationContext context = getContext();
         servletContext.addListener(new ContextLoaderListener(context));

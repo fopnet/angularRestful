@@ -14,6 +14,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -35,12 +36,26 @@ public class Profile {
     @Length(max = 100)
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = javax.persistence.CascadeType.ALL)
-    @JoinTable(name = "PERMISSION_PROFILE",
-            joinColumns = { @JoinColumn(name = "PROFILEID", nullable = false, updatable = false) },
-            inverseJoinColumns = { @JoinColumn(name = "PERMISSIONID", nullable = false, updatable = false) })
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = javax.persistence.CascadeType.ALL)
+//    @JoinTable(name = "PERMISSION_PROFILE",
+//            joinColumns = { @JoinColumn(name = "PROFILEID", nullable = false, updatable = false) },
+//            inverseJoinColumns = { @JoinColumn(name = "PERMISSIONID", nullable = false, updatable = false) })
+//    @Fetch(value = FetchMode.SUBSELECT)
+
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "profile")
+    @Cascade (CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     private Set<Permission> permissions;
+
+    public Profile(Long id, String name) {
+        this();
+        this.setId(id);
+        this.setName(name);
+    }
+
+    public Profile() {
+        permissions = new HashSet<Permission>();
+    }
 
     public Long getId() {
         return id;
@@ -58,30 +73,31 @@ public class Profile {
         this.name = name;
     }
 
-    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "profile")
-    @Cascade (CascadeType.ALL)
-    @Fetch(value = FetchMode.SUBSELECT)
     public Set<Permission> getPermissions() {
         return Collections.unmodifiableSet(permissions);
     }
 
+    protected void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof User)) {
+        if (!(o instanceof Profile)) {
             return false;
         }
         Profile other  = (Profile) o;
-        EqualsBuilder builder = new EqualsBuilder();
-        EqualsBuilder append = builder.append(  Strings.nullToEmpty(getName()).toLowerCase(),
-                                                Strings.nullToEmpty(other.getName()).toLowerCase());
-        return builder.isEquals();
+        return new EqualsBuilder()
+                .append(  Strings.nullToEmpty(getName()).toLowerCase(),
+                          Strings.nullToEmpty(other.getName()).toLowerCase())
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        HashCodeBuilder builder = new HashCodeBuilder();
-        builder.append(Strings.nullToEmpty( getName() ).toLowerCase());
-        return builder.toHashCode();
+        return new HashCodeBuilder()
+                .append(Strings.nullToEmpty( getName() ).toLowerCase())
+                .toHashCode();
     }
 
 }

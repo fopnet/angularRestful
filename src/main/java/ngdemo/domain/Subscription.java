@@ -1,5 +1,6 @@
 package ngdemo.domain;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.persistence.*;
@@ -67,16 +68,18 @@ public class Subscription {
             return false;
         }
         Subscription other  = (Subscription) o;
-        return getJournal().equals(other.getJournal())
-                && getSubscriber().equals(other.getSubscriber());
+        return new EqualsBuilder()
+                .appendSuper( getJournal().equals(other.getJournal() ) )
+                .appendSuper( getSubscriber().equals(other.getSubscriber()) )
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        HashCodeBuilder builder = new HashCodeBuilder();
-        builder.append(getJournal().hashCode())
-               .append(getSubscriber().hashCode());
-        return builder.toHashCode();
+        return new HashCodeBuilder()
+                .appendSuper (getJournal().hashCode())
+                .appendSuper (getSubscriber().hashCode())
+                .toHashCode();
     }
 
 }

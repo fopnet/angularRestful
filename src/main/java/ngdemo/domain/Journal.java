@@ -34,7 +34,7 @@ public class Journal {
     @NotNull
     @NotEmpty
     @Length(max = 100)
-    private String filePath;
+    private String fileName;
 
     @ManyToOne
     @JoinColumn(name="USERID")
@@ -57,12 +57,12 @@ public class Journal {
         this.subject = subject;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public User getPublisher() {
@@ -75,21 +75,21 @@ public class Journal {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof User)) {
+        if (!(o instanceof Journal)) {
             return false;
         }
         Journal other  = (Journal) o;
-        EqualsBuilder builder = new EqualsBuilder();
-        EqualsBuilder append = builder.append(  Strings.nullToEmpty(getFilePath()).toLowerCase(),
-                                                Strings.nullToEmpty(other.getFilePath()).toLowerCase());
-        return builder.isEquals();
+        return new EqualsBuilder()
+                .append(  Strings.nullToEmpty(getFileName()).toLowerCase(),
+                          Strings.nullToEmpty(other.getFileName()).toLowerCase())
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        HashCodeBuilder builder = new HashCodeBuilder();
-        builder.append(Strings.nullToEmpty( getFilePath() ).toLowerCase());
-        return builder.toHashCode();
+        return new HashCodeBuilder()
+                .append(Strings.nullToEmpty( getFileName() ).toLowerCase())
+                .toHashCode();
     }
 
 }

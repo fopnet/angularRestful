@@ -23,12 +23,11 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="ngdemo" />
-        <module name="SpringSecurityCustomAuthenticationProvider" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
       <module name="ngdemo" target="1.8" />
-      <module name="SpringSecurityCustomAuthenticationProvider" target="1.8" />
+      <module name="SpringSecurityCustomAuthenticationProvider" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

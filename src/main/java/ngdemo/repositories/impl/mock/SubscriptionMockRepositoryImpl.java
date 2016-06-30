@@ -8,6 +8,7 @@ import org.apache.commons.collections4.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.management.RuntimeOperationsException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,7 +46,10 @@ public class SubscriptionMockRepositoryImpl implements SubscriptionRepository {
 
     @Override
     public boolean remove(Subscription subscription) {
-        return this.subscriptions.remove(subscription);
+        if (!this.subscriptions.remove(subscription)) {
+            throw new RuntimeOperationsException(null, "Could not found the item");
+        }
+        return true;
     }
 
 }

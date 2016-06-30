@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../SpringSecurityCustomAuthenticationProvider/SpringSecurityCustomAuthenticationProvider.iml" filepath="$PROJECT_DIR$/../SpringSecurityCustomAuthenticationProvider/SpringSecurityCustomAuthenticationProvider.iml" />
       <module fileurl="file://$PROJECT_DIR$/ngdemo.iml" filepath="$PROJECT_DIR$/ngdemo.iml" />
     </modules>
   </component>

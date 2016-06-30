@@ -6,9 +6,9 @@ import ngdemo.domain.Journal;
 import ngdemo.domain.User;
 import ngdemo.repositories.contract.JournalRepository;
 import ngdemo.repositories.contract.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.management.RuntimeOperationsException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -49,7 +49,7 @@ public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> im
     @Override
     public Journal update(Journal journal) {
         Journal byId = this.getById(journal.getId());
-        byId.setFilePath(journal.getFilePath());
+        byId.setFileName(journal.getFileName());
         byId.setPublisher(journal.getPublisher());
         byId.setSubject(journal.getSubject());
         return byId;
@@ -58,7 +58,9 @@ public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> im
     @Override
     public Journal remove(Long id) {
         Journal byId = this.getById(id);
-        this.journals.remove(byId);
+        if (!this.journals.remove(byId)) {
+            throw new RuntimeOperationsException(null, "Could not found the item");
+        }
         return byId;
     }
 
@@ -68,7 +70,7 @@ public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> im
      * @return
      */
     private List<Journal> createJournals() {
-        int numberOfJournals = 10;
+        int numberOfJournals = 4;
         List<User> users =   userRepository.getAll();
 
         for (long i = 0; i < numberOfJournals; i++) {
@@ -77,7 +79,7 @@ public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> im
             Journal journal = new Journal();
             journal.setId(i + 1);
             journal.setSubject("Subject " + (i + 1));
-            journal.setFilePath("Path " + (i + 1));
+            journal.setFileName("Path " + (i + 1));
             journal.setPublisher(users.get(randomIdx));
             this.journals.add(journal);
         }
