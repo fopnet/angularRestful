@@ -1,0 +1,16 @@
+<h1>Greeting</h1>
+<div ng-show="authenticated">
+    <p>The ID is {{homeCtrl.greeting.id}}</p>
+    <p>The content is {{homeCtrl.greeting.content}}</p>
+</div>
+<div  ng-show="!authenticated">
+    <p>Login to see your greeting</p>
+</div>
+
+<div ng-controller="navCtrl as nav" class="container" ng-cloak class="ng-cloak">
+    <ul class="nav nav-pills" role="tablist">
+        <li class="active"><a href="#/">home</a></li>
+        <li><a href="#/login">login</a></li>
+        <li ng-show="authenticated"><a href="" ng-click="nav.logout()">logout</a></li>
+    </ul>
+</div>

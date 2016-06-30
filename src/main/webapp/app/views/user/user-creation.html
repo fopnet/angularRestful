@@ -1,0 +1,58 @@
+<div class="container">
+  <h1>Create a new user</h1>
+
+  <form class="col-md-4" novalidate="novalidate" name="userForm">
+    <fieldset class="form-group" ng-class="{ 'has-error' : userForm.firstName.$invalid && !userForm.firstName.$pristine }">
+      <label class="control-label" for="inputFirstName">First name:</label>
+      <input type="text" name="firstName" id="inputFirstName" ng-model="user.firstName" placeholder="First name"
+             class="form-control" ng-required="true" ng-maxlength="100"/>
+      <p ng-show="userForm.firstName.$invalid && !userForm.firstName.$pristine" class="help-block">First name is required.</p>
+    </fieldset>
+
+    <fieldset class="form-group" ng-class="{ 'has-error' : userForm.lastName.$invalid && !userForm.lastName.$pristine }">
+      <label class="control-label" for="inputLastName">Last name:</label>
+      <input type="text" name="lastName" id="inputLastName" ng-model="user.lastName" placeholder="Last name"
+             class="form-control"  ng-required="true" ng-maxlength="100"/>
+      <p ng-show="userForm.lastName.$invalid && !userForm.lastName.$pristine" class="help-block">Last name is required.</p>
+    </fieldset>
+
+    <!-- email -->
+    <fieldset class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }">
+      <label class="control-label" for="inputEmail">Email:</label>
+      <input type="text" name="email" id="inputEmail" ng-model="user.email" placeholder="Email"
+             class="form-control" required ng-minlength="12" ng-maxlength="100"/>
+      <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Enter a valid email.</p>
+    </fieldset>
+
+    <!-- password -->
+    <fieldset class="form-group" ng-class="{ 'has-error' : userForm.password.$invalid && !userForm.password.$pristine }">
+      <label class="control-label" for="inputPwd">Password:</label>
+      <input type="password" name="password" id="inputPwd" ng-model="user.password"
+             class="form-control" required  ng-minlength="6" ng-maxlength="10"/>
+      <p ng-show="userForm.password.$error.minlength" class="help-block">Password is too short.</p>
+    </fieldset>
+
+    <!-- PROFILE -->
+    <fieldset class="form-group">
+        <label for="rdoPublisher">
+            <input type="radio" id="rdoPublisher" name="profile" ng-model="user.profile.id"
+                   value="1" ng-required="!user.profile.id"/>
+            Publisher
+        </label>
+        <label for="rdoPublic">
+            <input type="radio" id="rdoPublic" name="profile" ng-model="user.profile.id"
+                   value="2" ng-required="!user.profile.id"/>
+            Public
+        </label>
+        <p ng-show="userForm.profile.$invalid && !userForm.profile.$pristine" class="help-block">
+    </fieldset>
+
+    <fieldset class="form-group">
+        <a ng-click="createNewUser()"
+           ng-class="{disabled: userForm.$invalid}"
+
+           class="btn btn-small btn-primary">create new user</a>
+    </fieldset>
+
+  </form>
+</div>

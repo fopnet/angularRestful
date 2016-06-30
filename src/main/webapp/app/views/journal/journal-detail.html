@@ -1,0 +1,47 @@
+<div class="container">
+  <h1>Journal detail</h1>
+
+  <form novalidate="novalidate" class="form-horizontal" name="journalForm">
+    <fieldset class="form-group" ng-class="{ 'has-error' : journalForm.subject.$invalid && !journalForm.subject.$pristine }">
+      <label class="control-label" for="inputSubject">Subject:</label>
+
+      <div class="controls" >
+          <input type="text" name="subject" id="inputSubject" ng-model="journal.subject" placeholder="Subject"
+                 class="form-control"  ng-required="true" ng-minlength="8" ng-maxlength="100"/>
+          <p ng-show="journalForm.subject.$invalid && !journalForm.subject.$pristine" class="help-block">Subject is required.</p>
+          <p ng-show="journalForm.subject.$error.minlength" class="help-block">Subject is too short.</p>
+          <p ng-show="journalForm.subject.$error.maxlength" class="help-block">Subject is too long.</p>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-group">
+      <label class="control-label" for="subscriberName">Subscriber:</label>
+
+      <div class="controls">
+          <input type="text" ng-readonly="true" disabled id="subscriberName" ng-value="getSubscriberName(journal.publisher)" />
+      </div>
+    </fieldset>
+
+    <fieldset class="form-group">
+      <label class="control-label" for="fileInput">Journal File:</label>
+      <div class="row form-inline">
+          <input type="file" id="fileInput" name="file"
+                 ng-model="journal.fileName"
+                 valid-file
+                 required
+                 accept="application/pdf"
+                  />
+           <label ng-model="journal.fileName" ng-model="journal.fileName" />
+      </div>
+    </fieldset>
+
+
+    <fieldset class="form-group">
+      <div class="controls">
+        <a ng-click="cancel()" class="btn btn-small">cancel</a>
+        <a ng-click="updateJournal()" class="btn btn-small btn-primary">update journal</a>
+      </div>
+    </fieldset>
+
+  </form>
+</div>
