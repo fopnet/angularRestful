@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface SubscriptionService {
 
-    List<Subscription> getAllBySubscriber(User subscriber, boolean isOnlySubscribed) ;
+    List<Subscription> getAllBySubscriber(User subscriber) ;
 
-    Subscription subscribe(Journal journal, User subscriber);
+    Subscription subscribe(Subscription subscription, User subscriber);
 
-    boolean unSubscribe(Subscription subscription);
+    boolean unSubscribe(Long idJournal, User loggedUser);
 
-    // This is a front-end funcionality
+    // Initially, This is a front-end funcionality
     //Journal readOnline(Journal journal);
 
 }

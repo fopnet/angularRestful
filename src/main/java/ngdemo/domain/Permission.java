@@ -9,18 +9,18 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Set;
 
 /**
  * Created by Felipe on 28/06/2016.
  */
-@XmlRootElement
+//@XmlRootElement
 @Entity
 @Table(name="PERMISSION")
 @SequenceGenerator(name="INC_PERMISSION", sequenceName = "GEN_PERMISSION")
-public class Permission {
+public class Permission implements Serializable {
 
     @Id
     @Column(name = "PERMISSIONID", unique = true, nullable = false)
@@ -63,8 +63,9 @@ public class Permission {
         }
         Permission other  = (Permission) o;
         return new EqualsBuilder()
-                .append(Strings.nullToEmpty(getName()).toLowerCase(),
-                        Strings.nullToEmpty(other.getName()).toLowerCase())
+                .append(  Strings.nullToEmpty(getName()).toLowerCase(),
+                          Strings.nullToEmpty(other.getName()).toLowerCase())
+                .append(  getId(), other.getId())
                 .isEquals();
     }
 
@@ -72,6 +73,7 @@ public class Permission {
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(Strings.nullToEmpty( getName() ).toLowerCase())
+                .append( getId() )
                 .toHashCode();
     }
 

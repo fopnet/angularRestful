@@ -1,29 +1,60 @@
 package ngdemo.repositories.impl.mock;
 
+import ngdemo.domain.Journal;
 import ngdemo.domain.Subscription;
 import ngdemo.domain.User;
+import ngdemo.repositories.contract.JournalRepository;
 import ngdemo.repositories.contract.SubscriptionRepository;
+import ngdemo.repositories.contract.UserRepository;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.Predicate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.management.RuntimeOperationsException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 //@Singleton
 @Repository("subscriptionDAO")
 public class SubscriptionMockRepositoryImpl implements SubscriptionRepository {
 
-    private List<Subscription> subscriptions = new ArrayList<Subscription>();
+    private final Set<Subscription> subscriptions;
 
-    public SubscriptionMockRepositoryImpl() {
+    private UserRepository userRepository;
+    private JournalRepository journalRepository;
+
+    /** singleton instance */
+    private static SubscriptionRepository INSTANCE;
+
+    public static SubscriptionRepository getInstance(final UserRepository userRepository, final JournalRepository journalRepository){
+        if(INSTANCE == null){
+            synchronized(SubscriptionMockRepositoryImpl.class){
+                if(INSTANCE == null){
+                    INSTANCE = new SubscriptionMockRepositoryImpl(userRepository, journalRepository);
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+    private SubscriptionMockRepositoryImpl(final UserRepository userRepository, final JournalRepository journalRepository) {
+        this.userRepository = userRepository;
+        this.journalRepository = journalRepository;
+        this.subscriptions = new HashSet<Subscription>();
+
+        this.createSubscriptions();
+    }
+
+    private Set<Subscription> createSubscriptions() {
+        List<Journal> journals = journalRepository.getAll();
+        User usr = userRepository.getAll().iterator().next();
+        for (int i = 0; i < journals.size()/2; i++) {
+            this.subscriptions.add(new Subscription(journals.get(i), usr, new Date()));
+        }
+        return this.subscriptions;
     }
 
     @Override
-    public List<Subscription> getAll() {
+    public Set<Subscription> getAll() {
         return subscriptions;
     }
 

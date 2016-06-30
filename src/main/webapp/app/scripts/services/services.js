@@ -2,4 +2,4 @@
 
 var services = angular.module('ngdemoApp.services', ['ngResource']);
 
-var baseUrl = 'http://localhost:8080';
+var baseUrl = 'http://localhost:8080/ngdemo';

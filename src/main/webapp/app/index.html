@@ -27,6 +27,7 @@
     <li><a href="#/journal-list">journal-list</a></li>
     <li><a href="#/journal-creation">journal-creation</a></li>
     <li><a href="#/journal-detail/1">journal-detail/1</a></li>
+    <li><a href="#/subscription-list">subscription-list</a></li>
 </ul>
 
 <!-- Add your site or application content here -->
@@ -68,10 +69,17 @@
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app.js"></script>
+<!-- Services ====================================-->
+
 <script src="scripts/services/services.js"></script>
 <script src="scripts/services/userService.js"></script>
+<script src="scripts/services/subscriptionService.js"></script>
+
+<!-- Controllers ====================================-->
 <script src="scripts/services/journalService.js"></script>
 <script src="scripts/controllers/userController.js"></script>
 <script src="scripts/controllers/journalController.js"></script>
+<script src="scripts/controllers/loginController.js"></script>
+<script src="scripts/controllers/subscriptionController.js"></script>
 <!-- endbuild -->
 </html>

@@ -9,14 +9,11 @@ import ngdemo.domain.ProfileType;
 import ngdemo.domain.User;
 import ngdemo.repositories.contract.UserRepository;
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.math.RandomUtils;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import javax.management.RuntimeOperationsException;
-import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 //import com.google.inject.Singleton;
@@ -25,10 +22,25 @@ import java.util.List;
 @Repository("userDAO")
 public class UserMockRepositoryImpl extends GenericMockRepository<User> implements UserRepository {
 
-    private List<User> users = new ArrayList<User>();
+    private final List<User> users;
 
-    public UserMockRepositoryImpl() {
-        this.users = this.createUsers();
+    /** singleton instance */
+    private static UserRepository INSTANCE;
+
+    public static UserRepository getInstance(){
+        if(INSTANCE == null){
+            synchronized(UserMockRepositoryImpl.class){
+                if(INSTANCE == null){
+                    INSTANCE = new UserMockRepositoryImpl();
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+    private UserMockRepositoryImpl() {
+        this.users = new ArrayList<User>();
+        this.createUsers();
     }
 
     public User getById(Long id) {
@@ -57,7 +69,7 @@ public class UserMockRepositoryImpl extends GenericMockRepository<User> implemen
     }
 
     public List<User> getAll() {
-        return this.users;
+        return Collections.unmodifiableList(this.users);
     }
 
     @Override
@@ -93,7 +105,7 @@ public class UserMockRepositoryImpl extends GenericMockRepository<User> implemen
         return this.users.size();
     }
 
-    private List<User> createUsers() {
+    private void createUsers() {
         int numberOfUsers = 10;
         Profile publc = ProfileType.PUBLIC.toProfile();
         Profile publisher = ProfileType.PUBLISHER.toProfile();
@@ -108,7 +120,6 @@ public class UserMockRepositoryImpl extends GenericMockRepository<User> implemen
             user.setProfile( i % 2 == 0 ? publc : publisher) ;
             this.users.add(user);
         }
-        return this.users;
     }
 
     private Long getCurrentMaxId() {

@@ -1,6 +1,7 @@
 package ngdemo.web;
 
 //import com.google.inject.Inject;
+
 import ngdemo.domain.User;
 import ngdemo.service.contract.DummyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.ws.rs.GET;
-//import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+//import javax.ws.rs.Path;
 
 //@Path("/dummy")
 @RestController

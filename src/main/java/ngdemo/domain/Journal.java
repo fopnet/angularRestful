@@ -9,16 +9,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /**
  * Created by Felipe on 28/06/2016.
  */
-@XmlRootElement
+//@XmlRootElement
 @Entity
 @Table(name="JOURNAL")
 @SequenceGenerator(name="INC_JOURNAL", sequenceName = "GEN_JOURNAL")
-public class Journal {
+public class Journal implements Serializable {
     @Id
     @Column(name = "JOURNALID", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "INC_JOURNAL")
@@ -82,6 +82,10 @@ public class Journal {
         return new EqualsBuilder()
                 .append(  Strings.nullToEmpty(getFileName()).toLowerCase(),
                           Strings.nullToEmpty(other.getFileName()).toLowerCase())
+                .append(  Strings.nullToEmpty(getSubject()).toLowerCase(),
+                          Strings.nullToEmpty(other.getSubject()).toLowerCase())
+                .append(  getId(),
+                          other.getId())
                 .isEquals();
     }
 
@@ -89,6 +93,8 @@ public class Journal {
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(Strings.nullToEmpty( getFileName() ).toLowerCase())
+                .append(Strings.nullToEmpty( getSubject() ).toLowerCase())
+                .append( getId() )
                 .toHashCode();
     }
 

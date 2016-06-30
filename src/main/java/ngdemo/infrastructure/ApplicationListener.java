@@ -3,15 +3,9 @@ package ngdemo.infrastructure;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.sql.DataSource;
 import java.io.InputStream;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Properties;
 /**
  * Created by eii5 on 06/11/2015.

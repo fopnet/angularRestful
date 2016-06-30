@@ -5,16 +5,16 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Felipe on 28/06/2016.
  */
-@XmlRootElement
+//@XmlRootElement
 @Entity
 @Table(name="SUBSCRIPTION")
-public class Subscription {
+public class Subscription implements  Comparable<Subscription> , Serializable {
 
     protected Subscription () {
         ///to hibernate use
@@ -23,6 +23,11 @@ public class Subscription {
     public Subscription (Journal j , User user) {
         this.journal = j;
         this.subscriber = user;
+    }
+
+    public Subscription (Journal j , User user, Date publicationDate) {
+        this(j, user);
+        this.date = publicationDate;
     }
 
     @ManyToOne
@@ -35,7 +40,7 @@ public class Subscription {
     @NotNull
     private User subscriber;
 
-    @Column(name = "date")
+    @Column(name = "SUBSCRIPTION_DATE")
     private Date date;
 
     public Journal getJournal() {
@@ -80,6 +85,11 @@ public class Subscription {
                 .appendSuper (getJournal().hashCode())
                 .appendSuper (getSubscriber().hashCode())
                 .toHashCode();
+    }
+
+    @Override
+    public int compareTo(Subscription o) {
+        return getJournal().getSubject().compareTo( o.getJournal().getSubject() );
     }
 
 }

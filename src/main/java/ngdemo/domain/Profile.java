@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,11 +20,11 @@ import java.util.Set;
 /**
  * Created by Felipe on 28/06/2016.
  */
-@XmlRootElement
+//@XmlRootElement
 @Entity
 @Table(name="PROFILE")
 @SequenceGenerator(name="INC_PROFILE", sequenceName = "GEN_PROFILE")
-public class Profile {
+public class Profile implements Serializable {
     @Id
     @Column(name = "PROFILEID", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "INC_PROFILE")
@@ -77,9 +77,9 @@ public class Profile {
         return Collections.unmodifiableSet(permissions);
     }
 
-    protected void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
-    }
+//    protected void setPermissions(Set<Permission> permissions) {
+//        this.permissions = permissions;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -90,6 +90,8 @@ public class Profile {
         return new EqualsBuilder()
                 .append(  Strings.nullToEmpty(getName()).toLowerCase(),
                           Strings.nullToEmpty(other.getName()).toLowerCase())
+                .append(  getId(),
+                          other.getId())
                 .isEquals();
     }
 
@@ -97,6 +99,7 @@ public class Profile {
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(Strings.nullToEmpty( getName() ).toLowerCase())
+                .append(getId())
                 .toHashCode();
     }
 

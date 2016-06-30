@@ -20,7 +20,7 @@
     <fieldset class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }">
       <label class="control-label" for="inputEmail">Email:</label>
       <input type="text" name="email" id="inputEmail" ng-model="user.email" placeholder="Email"
-             class="form-control" required ng-minlength="12" ng-maxlength="100"/>
+             class="form-control" ng-required="true" ng-minlength="12" ng-maxlength="100"/>
       <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Enter a valid email.</p>
     </fieldset>
 
@@ -28,7 +28,7 @@
     <fieldset class="form-group" ng-class="{ 'has-error' : userForm.password.$invalid && !userForm.password.$pristine }">
       <label class="control-label" for="inputPwd">Password:</label>
       <input type="password" name="password" id="inputPwd" ng-model="user.password"
-             class="form-control" required  ng-minlength="6" ng-maxlength="10"/>
+             class="form-control" ng-required="true"  ng-minlength="6" ng-maxlength="10"/>
       <p ng-show="userForm.password.$error.minlength" class="help-block">Password is too short.</p>
     </fieldset>
 

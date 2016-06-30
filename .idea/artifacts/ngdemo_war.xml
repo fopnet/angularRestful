@@ -1,8 +1,13 @@
 <component name="ArtifactManager">
   <artifact type="war" name="ngdemo:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
+    <output-path>D:/Arquivos de programas/Apache Software Fondation/tomcat-9.0.0.M8/webapps/ngdemo/target</output-path>
     <root id="archive" name="ngdemo.war">
       <element id="artifact" artifact-name="ngdemo:war exploded" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="library" level="application" name="sass-stdlib" />
+        </element>
+      </element>
     </root>
   </artifact>
 </component>

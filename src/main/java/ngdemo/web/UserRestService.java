@@ -1,11 +1,10 @@
 package ngdemo.web;
 
 //import com.google.inject.Inject;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ngdemo.domain.User;
 import ngdemo.service.contract.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -50,7 +48,9 @@ public class UserRestService {
 //    @POST
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    @Produces(MediaType.APPLICATION_JSON)
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+    @RequestMapping(method = RequestMethod.POST,
+                    produces = MediaType.APPLICATION_JSON,
+                    consumes = MediaType.APPLICATION_JSON)
     public User create(@RequestBody User user) {
         return userService.createNewUser(user);
     }

@@ -1,6 +1,6 @@
 'use strict';
 
-var journalUrl = baseUrl + '/ngdemo/web/journals';
+var journalUrl = baseUrl + '/web/journals';
 
 function getFormData (journal, file) {
     var fdata = new FormData();

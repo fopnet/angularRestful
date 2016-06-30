@@ -3,16 +3,15 @@ package ngdemo.domain;
 import com.google.common.base.Strings;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +19,7 @@ import java.util.Set;
 @Entity
 @Table(name="USER")
 @SequenceGenerator(name="INC_USER", sequenceName = "GEN_USER")
-public class User {
+public class User implements Serializable  {
 
     @Id
     @Column(name = "USERID", unique = true, nullable = false)
@@ -54,7 +53,7 @@ public class User {
             inverseJoinColumns={@JoinColumn(name="PROFILEID", referencedColumnName="id")})
     private Profile profile;
 
-    @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
     @JoinTable(name="SUBSCRIPTION",
             joinColumns={@JoinColumn(name="USERID", referencedColumnName="id")},
             inverseJoinColumns={@JoinColumn(name="SUBSCRIPTIONID", referencedColumnName="id")})
@@ -124,9 +123,9 @@ public class User {
         return subscriptions;
     }
 
-//    public void setSubscriptions(List<Subscription> subscriptions) {
-//        this.subscriptions = subscriptions;
-//    }
+    public void setSubscriptions(Set<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
 
     /*********************************************************************
      * Methods
@@ -147,6 +146,12 @@ public class User {
         return new EqualsBuilder()
                     .append(Strings.nullToEmpty(getEmail()).toLowerCase(),
                             Strings.nullToEmpty(other.getEmail()).toLowerCase())
+                    .append(getId(),
+                            other.getId())
+                    .append(Strings.nullToEmpty(getFirstName()),
+                            Strings.nullToEmpty(other.getFirstName()))
+                    .append(Strings.nullToEmpty(getLastName()),
+                            Strings.nullToEmpty(other.getLastName()))
                     .isEquals();
     }
 
@@ -154,6 +159,9 @@ public class User {
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(Strings.nullToEmpty( getEmail() ).toLowerCase())
+                .append( getId() )
+                .append( getFirstName() )
+                .append( getLastName() )
                 .toHashCode();
     }
 

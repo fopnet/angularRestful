@@ -5,11 +5,13 @@ import com.google.common.primitives.Longs;
 import ngdemo.domain.Journal;
 import ngdemo.domain.User;
 import ngdemo.repositories.contract.JournalRepository;
+import ngdemo.repositories.contract.SubscriptionRepository;
 import ngdemo.repositories.contract.UserRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.management.RuntimeOperationsException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -17,13 +19,28 @@ import java.util.Random;
 @Repository("journalDAO")
 public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> implements JournalRepository {
 
-    private List<Journal> journals = new ArrayList<Journal>();
+    private final List<Journal> journals;
 
     private UserRepository userRepository;
 
-    public JournalMockRepositoryImpl(final UserRepository userRepository) {
+    /** singleton instance */
+    private static JournalRepository INSTANCE;
+
+    public static JournalRepository getInstance(final UserRepository userRepository){
+        if(INSTANCE == null){
+            synchronized(JournalMockRepositoryImpl.class){
+                if(INSTANCE == null){
+                    INSTANCE = new JournalMockRepositoryImpl(userRepository);
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+    private JournalMockRepositoryImpl(final UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.journals = this.createJournals();
+        this.journals = new ArrayList<Journal>();
+        this.createJournals();
     }
 
     public Journal getById(Long id) {
@@ -36,7 +53,7 @@ public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> im
     }
 
     public List<Journal> getAll() {
-        return this.journals;
+        return Collections.unmodifiableList( this.journals );
     }
 
     @Override
@@ -69,7 +86,7 @@ public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> im
      * Temp implementations
      * @return
      */
-    private List<Journal> createJournals() {
+    private void createJournals() {
         int numberOfJournals = 4;
         List<User> users =   userRepository.getAll();
 
@@ -83,7 +100,6 @@ public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> im
             journal.setPublisher(users.get(randomIdx));
             this.journals.add(journal);
         }
-        return this.journals;
     }
 
     private Long getCurrentMaxId() {

@@ -21,43 +21,48 @@
     <!--<resources mapping="/resources/**"  location="/resources/" />-->
     <mvc:default-servlet-handler/>
     <mvc:resources mapping="/app/**" location="/app/" />
-    <mvc:resources mapping="/web/**" location="/" />
-    <mvc:resources mapping="/web/users/**" location="/" />
-    <mvc:resources mapping="/web/users/numberOfUsers/**" location="/" />
+    <!--<mvc:resources mapping="/app/bower_components/bootstrap/dist/**" location="/app/bower_components/bootstrap/dist/" />-->
 
     <!--<context:component-scan base-package=""  />-->
     <!--To enable @RequestMapping process on type level and method level-->
 
-    <bean id="userDAO" class="ngdemo.repositories.impl.mock.UserMockRepositoryImpl" />
-    <bean id="dummyRepository" class="ngdemo.repositories.impl.mock.DummyMockRepositoryImpl" />
-    <bean id="subscriptionDAO" class="ngdemo.repositories.impl.mock.SubscriptionMockRepositoryImpl" />
-    <bean id="journalDAO" class="ngdemo.repositories.impl.mock.JournalMockRepositoryImpl">
+    <!-- Repositories Beans =================================================================================== -->
+
+
+    <bean id="dummyRepository" class="ngdemo.repositories.impl.mock.DummyMockRepositoryImpl" scope="singleton"/>
+
+    <bean id="userDAO" class="ngdemo.repositories.impl.mock.UserMockRepositoryImpl" scope="singleton" factory-method="getInstance"/>
+
+    <bean id="journalDAO" class="ngdemo.repositories.impl.mock.JournalMockRepositoryImpl" scope="singleton" factory-method="getInstance">
         <constructor-arg ref="userDAO"/>
     </bean>
 
-
-    <!-- Services ================================================================== -->
-    <bean id="subscriptionService" class="ngdemo.service.impl.SubscriptionServiceImpl">
-        <constructor-arg ref="subscriptionDAO"/>
+    <bean id="subscriptionDAO" class="ngdemo.repositories.impl.mock.SubscriptionMockRepositoryImpl" scope="singleton" factory-method="getInstance">
+        <constructor-arg ref="userDAO"/>
         <constructor-arg ref="journalDAO"/>
     </bean>
 
-    <bean id="journalService" class="ngdemo.service.impl.JournalServiceImpl">
-        <constructor-arg ref="journalDAO"/>
+    <!-- Services ================================================================================================= -->
+
+    <bean id="subscriptionService" class="ngdemo.service.impl.SubscriptionServiceImpl" scope="singleton"/>
+
+    <bean id="journalService" class="ngdemo.service.impl.JournalServiceImpl" scope="singleton">
+        <constructor-arg ref="journalDAO" />
     </bean>
 
-    <bean id="dummyService" class="ngdemo.service.impl.DummyServiceImpl" >
+    <bean id="dummyService" class="ngdemo.service.impl.DummyServiceImpl" scope="singleton">
         <constructor-arg ref="dummyRepository"/>
     </bean>
 
-    <bean id="userService" class="ngdemo.service.impl.UserServiceImpl" >
+    <bean id="userService" class="ngdemo.service.impl.UserServiceImpl"  scope="singleton">
         <constructor-arg ref="userDAO"/>
     </bean>
 
 
     <!-- Resolvers  ================================================================== -->
     <!-- Configure bean to convert JSON to POJO and vice versa  -->
-    <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+    <!--<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>-->
+    <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.GsonHttpMessageConverter"/>
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 

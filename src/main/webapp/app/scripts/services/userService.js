@@ -1,9 +1,9 @@
 'use strict';
 
-var userUrl = baseUrl + '/ngdemo/web/users';
+var userUrl = baseUrl + '/web/users';
 
 services.factory('DummyFactory', function ($resource) {
-    return $resource(baseUrl + '/ngdemo/web/dummy', {}, {
+    return $resource(baseUrl + '/web/dummy', {}, {
         query: { method: 'GET', params: {} }
     })
 });
