@@ -8,8 +8,7 @@ import ngdemo.domain.Profile;
 import ngdemo.domain.ProfileType;
 import ngdemo.domain.User;
 import ngdemo.repositories.contract.UserRepository;
-import org.apache.commons.lang.RandomStringUtils;
-import org.springframework.stereotype.Repository;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.management.RuntimeOperationsException;
 import java.util.ArrayList;
@@ -19,8 +18,8 @@ import java.util.List;
 //import com.google.inject.Singleton;
 
 //@Singleton
-@Repository("userDAO")
-public class UserMockRepositoryImpl extends GenericMockRepository<User> implements UserRepository {
+//@Repository("userDAO")
+public class UserMockRepositoryImpl extends GenericMockRepository<User,Long> implements UserRepository {
 
     private final List<User> users;
 
@@ -63,11 +62,6 @@ public class UserMockRepositoryImpl extends GenericMockRepository<User> implemen
         return new NullUser();
     }
 
-    @Override
-    public User loadUserByEmail(String login) {
-        return getByEmail(login);
-    }
-
     public List<User> getAll() {
         return Collections.unmodifiableList(this.users);
     }
@@ -92,16 +86,15 @@ public class UserMockRepositoryImpl extends GenericMockRepository<User> implemen
     }
 
     @Override
-    public User remove(Long id) {
-        User byId = this.getById(id);
-        if (!this.users.remove(byId)) {
+    public User remove(User user) {
+        if (!this.users.remove(user)) {
             throw new RuntimeOperationsException(null, "Could not found the item");
         }
-        return byId;
+        return user;
     }
 
     @Override
-    public int getNumberOfUsers() {
+    public int getCount() {
         return this.users.size();
     }
 

@@ -5,9 +5,7 @@ import com.google.common.primitives.Longs;
 import ngdemo.domain.Journal;
 import ngdemo.domain.User;
 import ngdemo.repositories.contract.JournalRepository;
-import ngdemo.repositories.contract.SubscriptionRepository;
 import ngdemo.repositories.contract.UserRepository;
-import org.springframework.stereotype.Repository;
 
 import javax.management.RuntimeOperationsException;
 import java.util.ArrayList;
@@ -16,8 +14,8 @@ import java.util.List;
 import java.util.Random;
 
 //@Singleton
-@Repository("journalDAO")
-public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> implements JournalRepository {
+//@Repository("journalDAO")
+public class JournalMockRepositoryImpl extends GenericMockRepository<Journal, Long> implements JournalRepository {
 
     private final List<Journal> journals;
 
@@ -36,6 +34,7 @@ public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> im
         }
         return INSTANCE;
     }
+
 
     private JournalMockRepositoryImpl(final UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -73,12 +72,11 @@ public class JournalMockRepositoryImpl extends GenericMockRepository<Journal> im
     }
 
     @Override
-    public Journal remove(Long id) {
-        Journal byId = this.getById(id);
-        if (!this.journals.remove(byId)) {
+    public Journal remove(Journal journal) {
+        if (!this.journals.remove(journal)) {
             throw new RuntimeOperationsException(null, "Could not found the item");
         }
-        return byId;
+        return journal;
     }
 
 

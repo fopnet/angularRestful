@@ -1,10 +1,13 @@
 package ngdemo.repositories.contract;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface Repository<T> {
+public interface Repository<T, PK extends Serializable> {
 
     List<T> getAll();
 
-    T getById(Long id);
+    T getById(PK id);
+
+    int getCount();
 }

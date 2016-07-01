@@ -1,8 +1,9 @@
 package ngdemo.domain;
 
 import com.google.common.base.Strings;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import ngdemo.infrastructure.json.GsonExclude;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
@@ -20,7 +21,6 @@ import java.util.Set;
 /**
  * Created by Felipe on 28/06/2016.
  */
-//@XmlRootElement
 @Entity
 @Table(name="PROFILE")
 @SequenceGenerator(name="INC_PROFILE", sequenceName = "GEN_PROFILE")
@@ -36,15 +36,13 @@ public class Profile implements Serializable {
     @Length(max = 100)
     private String name;
 
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = javax.persistence.CascadeType.ALL)
-//    @JoinTable(name = "PERMISSION_PROFILE",
-//            joinColumns = { @JoinColumn(name = "PROFILEID", nullable = false, updatable = false) },
-//            inverseJoinColumns = { @JoinColumn(name = "PERMISSIONID", nullable = false, updatable = false) })
-//    @Fetch(value = FetchMode.SUBSELECT)
-
-    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "profile")
-    @Cascade (CascadeType.ALL)
+    @ManyToMany(cascade= javax.persistence.CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name="PERMISSION_PROFILE",
+            joinColumns={@JoinColumn(name="PROFILEID", nullable = false, updatable = false)},
+            inverseJoinColumns={@JoinColumn(name="PERMISSIONID", nullable = false, updatable = false)})
     @Fetch(value = FetchMode.SUBSELECT)
+    @GsonExclude
+    @Transient
     private Set<Permission> permissions;
 
     public Profile(Long id, String name) {
@@ -54,7 +52,7 @@ public class Profile implements Serializable {
     }
 
     public Profile() {
-        permissions = new HashSet<Permission>();
+
     }
 
     public Long getId() {
@@ -74,12 +72,14 @@ public class Profile implements Serializable {
     }
 
     public Set<Permission> getPermissions() {
+        if  (permissions == null)
+            permissions = new HashSet<Permission>();
         return Collections.unmodifiableSet(permissions);
     }
 
-//    protected void setPermissions(Set<Permission> permissions) {
-//        this.permissions = permissions;
-//    }
+    protected void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -26,22 +26,6 @@
     <!--<context:component-scan base-package=""  />-->
     <!--To enable @RequestMapping process on type level and method level-->
 
-    <!-- Repositories Beans =================================================================================== -->
-
-
-    <bean id="dummyRepository" class="ngdemo.repositories.impl.mock.DummyMockRepositoryImpl" scope="singleton"/>
-
-    <bean id="userDAO" class="ngdemo.repositories.impl.mock.UserMockRepositoryImpl" scope="singleton" factory-method="getInstance"/>
-
-    <bean id="journalDAO" class="ngdemo.repositories.impl.mock.JournalMockRepositoryImpl" scope="singleton" factory-method="getInstance">
-        <constructor-arg ref="userDAO"/>
-    </bean>
-
-    <bean id="subscriptionDAO" class="ngdemo.repositories.impl.mock.SubscriptionMockRepositoryImpl" scope="singleton" factory-method="getInstance">
-        <constructor-arg ref="userDAO"/>
-        <constructor-arg ref="journalDAO"/>
-    </bean>
-
     <!-- Services ================================================================================================= -->
 
     <bean id="subscriptionService" class="ngdemo.service.impl.SubscriptionServiceImpl" scope="singleton"/>
@@ -62,7 +46,7 @@
     <!-- Resolvers  ================================================================== -->
     <!-- Configure bean to convert JSON to POJO and vice versa  -->
     <!--<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>-->
-    <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.GsonHttpMessageConverter"/>
+    <bean id="jsonMessageConverter" class="ngdemo.infrastructure.json.CustomGsonHttpMessageConverter"/>
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 

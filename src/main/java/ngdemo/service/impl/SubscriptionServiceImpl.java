@@ -34,7 +34,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public List<Subscription> getAllBySubscriber(User subscriber) {
-        Set<Subscription> subscriptions = subscriptionRepository.getAll();
+        List<Subscription> subscriptions = subscriptionRepository.getAll();
 
         List<Journal> subscribedJournals = new ArrayList<Journal>();
 
@@ -86,7 +86,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Override
     public boolean unSubscribe(Long idJournal, User subscriber) {
         Subscription subscription = createSubscription(idJournal, subscriber);
-        return this.subscriptionRepository.remove(subscription);
+        this.subscriptionRepository.remove(subscription);
+        return true;
     }
 
     private Subscription createSubscription(Long idJournal, User subscriber) {

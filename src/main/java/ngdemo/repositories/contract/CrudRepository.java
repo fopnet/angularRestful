@@ -2,13 +2,13 @@ package ngdemo.repositories.contract;
 
 import java.io.Serializable;
 
-public interface CrudRepository<T, PK extends Serializable> extends Repository<T> {
+public interface CrudRepository<T, PK extends Serializable> extends Repository<T, PK> {
 
     T create(T t);
 
-    T update(T user);
+    T update(T t);
 
-    T remove(PK id);
+    T remove(T t);
 
 
 }

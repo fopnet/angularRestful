@@ -1,7 +1,7 @@
 package ngdemo.domain;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -30,18 +30,25 @@ public class Subscription implements  Comparable<Subscription> , Serializable {
         this.date = publicationDate;
     }
 
+    @EmbeddedId
+    private SubscriptionID id;
+
     @ManyToOne
     @JoinColumn(name="JOURNALID")
     @NotNull
     private Journal journal;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="USERID")
     @NotNull
     private User subscriber;
 
     @Column(name = "SUBSCRIPTION_DATE")
     private Date date;
+
+    public SubscriptionID getId() {
+        return id;
+    }
 
     public Journal getJournal() {
         return journal;
@@ -74,16 +81,14 @@ public class Subscription implements  Comparable<Subscription> , Serializable {
         }
         Subscription other  = (Subscription) o;
         return new EqualsBuilder()
-                .appendSuper( getJournal().equals(other.getJournal() ) )
-                .appendSuper( getSubscriber().equals(other.getSubscriber()) )
+                .append( getId() , other.getId()  )
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .appendSuper (getJournal().hashCode())
-                .appendSuper (getSubscriber().hashCode())
+                .append (getId())
                 .toHashCode();
     }
 

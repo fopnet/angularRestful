@@ -2,22 +2,27 @@ package ngdemo.repositories.impl.mock;
 
 import ngdemo.domain.Journal;
 import ngdemo.domain.Subscription;
+import ngdemo.domain.SubscriptionID;
 import ngdemo.domain.User;
 import ngdemo.repositories.contract.JournalRepository;
 import ngdemo.repositories.contract.SubscriptionRepository;
 import ngdemo.repositories.contract.UserRepository;
+import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.Predicate;
-import org.springframework.stereotype.Repository;
 
 import javax.management.RuntimeOperationsException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 //@Singleton
-@Repository("subscriptionDAO")
-public class SubscriptionMockRepositoryImpl implements SubscriptionRepository {
+//@Repository("subscriptionDAO")
+public class SubscriptionMockRepositoryImpl
+        extends GenericMockRepository<Subscription, SubscriptionID>
+        implements SubscriptionRepository {
 
-    private final Set<Subscription> subscriptions;
+    private final List<Subscription> subscriptions;
 
     private UserRepository userRepository;
     private JournalRepository journalRepository;
@@ -39,12 +44,12 @@ public class SubscriptionMockRepositoryImpl implements SubscriptionRepository {
     private SubscriptionMockRepositoryImpl(final UserRepository userRepository, final JournalRepository journalRepository) {
         this.userRepository = userRepository;
         this.journalRepository = journalRepository;
-        this.subscriptions = new HashSet<Subscription>();
+        this.subscriptions = new ArrayList<>();
 
         this.createSubscriptions();
     }
 
-    private Set<Subscription> createSubscriptions() {
+    private List<Subscription> createSubscriptions() {
         List<Journal> journals = journalRepository.getAll();
         User usr = userRepository.getAll().iterator().next();
         for (int i = 0; i < journals.size()/2; i++) {
@@ -53,9 +58,18 @@ public class SubscriptionMockRepositoryImpl implements SubscriptionRepository {
         return this.subscriptions;
     }
 
-    @Override
-    public Set<Subscription> getAll() {
+    public List<Subscription> getAll() {
         return subscriptions;
+    }
+
+    @Override
+    public Subscription getById(SubscriptionID id) {
+        return IterableUtils.find(getAll(), new Predicate<Subscription>() {
+            @Override
+            public boolean evaluate(Subscription o) {
+                return o.getId().equals(id);
+            }
+        });
     }
 
     @Override
@@ -69,6 +83,14 @@ public class SubscriptionMockRepositoryImpl implements SubscriptionRepository {
     }
 
     @Override
+    public Subscription remove(Subscription subscription) {
+        if (!this.subscriptions.remove(subscription)) {
+            throw new RuntimeOperationsException(null, "Could not found the item");
+        }
+        return subscription;
+    }
+
+    @Override
     public Subscription create(Subscription subscription) {
         subscription.setDate(new Date());
         this.subscriptions.add(subscription);
@@ -76,11 +98,8 @@ public class SubscriptionMockRepositoryImpl implements SubscriptionRepository {
     }
 
     @Override
-    public boolean remove(Subscription subscription) {
-        if (!this.subscriptions.remove(subscription)) {
-            throw new RuntimeOperationsException(null, "Could not found the item");
-        }
-        return true;
+    public Subscription update(Subscription subscription) {
+        throw new UnsupportedOperationException("Method not implemented!");
     }
 
 }

@@ -1,8 +1,9 @@
 package ngdemo.domain;
 
 import com.google.common.base.Strings;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import ngdemo.infrastructure.json.GsonExclude;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Length;
@@ -10,14 +11,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@XmlRootElement
 @Entity
-@Table(name="USER")
+@Table(name="\"USER\"")
 @SequenceGenerator(name="INC_USER", sequenceName = "GEN_USER")
 public class User implements Serializable  {
 
@@ -47,21 +46,18 @@ public class User implements Serializable  {
     @NotNull
     private String email;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinTable(name="PERMISSION_PROFILE",
-            joinColumns={@JoinColumn(name="USERID", referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="PROFILEID", referencedColumnName="id")})
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PROFILEID", nullable = false)
+    @NotNull
     private Profile profile;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
-    @JoinTable(name="SUBSCRIPTION",
-            joinColumns={@JoinColumn(name="USERID", referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="SUBSCRIPTIONID", referencedColumnName="id")})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subscriber")
     @Fetch(value = FetchMode.SUBSELECT)
+    @GsonExclude
+    @Transient
     private Set<Subscription> subscriptions;
 
     public User() {
-        this.subscriptions = new HashSet<Subscription>();
     }
 
     /*********************************************************************
@@ -120,6 +116,8 @@ public class User implements Serializable  {
     }
 
     public Set<Subscription> getSubscriptions() {
+        if (subscriptions == null)
+            this.subscriptions = new HashSet<Subscription>();
         return subscriptions;
     }
 

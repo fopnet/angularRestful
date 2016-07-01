@@ -85,8 +85,8 @@ public class JournalServiceImpl implements JournalService {
 
     @Override
     public Journal remove(Long id) {
-        Journal removed = this.journalRepository.remove(id);
-        return removed;
+        Journal removed = getById(id);
+        return this.journalRepository.remove(removed);
     }
 
     private void saveFileOnDisk(Journal journal, MultipartFile file, String basePath) throws IOException {

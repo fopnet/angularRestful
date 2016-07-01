@@ -2,8 +2,8 @@ package ngdemo.domain;
 
 
 import com.google.common.base.Strings;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -11,14 +11,14 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+
 /**
  * Created by Felipe on 28/06/2016.
  */
-//@XmlRootElement
 @Entity
 @Table(name="JOURNAL")
 @SequenceGenerator(name="INC_JOURNAL", sequenceName = "GEN_JOURNAL")
-public class Journal implements Serializable {
+public class Journal {
     @Id
     @Column(name = "JOURNALID", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "INC_JOURNAL")
@@ -30,14 +30,14 @@ public class Journal implements Serializable {
     @Length(max = 100)
     private String subject;
 
-    @Column(name = "FILEPATH",length = 400)
+    @Column(name = "FILE_PATH",length = 400)
     @NotNull
     @NotEmpty
     @Length(max = 100)
     private String fileName;
 
     @ManyToOne
-    @JoinColumn(name="USERID")
+    @JoinColumn(name="PUBLISHERID")
     @NotNull
     private User publisher;
 

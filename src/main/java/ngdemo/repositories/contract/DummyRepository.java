@@ -2,6 +2,6 @@ package ngdemo.repositories.contract;
 
 import ngdemo.domain.User;
 
-public interface DummyRepository extends Repository<User> {
+public interface DummyRepository extends Repository<User, Long> {
     User getDefaultUser();
 }

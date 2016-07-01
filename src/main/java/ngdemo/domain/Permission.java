@@ -2,8 +2,8 @@ package ngdemo.domain;
 
 
 import com.google.common.base.Strings;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -34,6 +34,7 @@ public class Permission implements Serializable {
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "permissions")
+    @Transient
     private Set<Profile> profiles;
 
     public Long getId() {

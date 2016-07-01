@@ -1,6 +1,5 @@
 package ngdemo.service.contract;
 
-import ngdemo.domain.Journal;
 import ngdemo.domain.Subscription;
 import ngdemo.domain.User;
 

@@ -53,12 +53,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User remove(Long id) {
-        return this.userRepository.remove(id);
+        return this.userRepository.remove( getById(id) );
     }
 
     @Override
     public int getNumberOfUsers() {
-        return this.userRepository.getNumberOfUsers();
+        return this.userRepository.getCount();
     }
 
     @Override
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user  = userRepository.loadUserByEmail(username);
+        User user  = userRepository.getByEmail(username);
         final boolean isActive = true;
         if(user == null){
             throw new UsernameNotFoundException("User not found");

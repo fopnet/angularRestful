@@ -3,7 +3,7 @@ package ngdemo.repositories.impl.mock;
 import ngdemo.domain.User;
 import ngdemo.repositories.contract.DummyRepository;
 
-public class DummyMockRepositoryImpl extends GenericMockRepository<User> implements DummyRepository {
+public class DummyMockRepositoryImpl extends GenericMockRepository<User, Long> implements DummyRepository {
 
     @Override
     public User getDefaultUser() {
