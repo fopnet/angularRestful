@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app version="3.0"
+         xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
@@ -14,9 +15,10 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            /WEB-INF/spring/appServlet/*.xml
+            /WEB-INF/spring/appServlet/spring-context.xml
         </param-value>
     </context-param>
+
 
     <listener>
         <listener-class>ngdemo.infrastructure.ApplicationListener</listener-class>
@@ -86,7 +88,7 @@
         <url-pattern>*.ico</url-pattern>
     </servlet-mapping>
 
-    <!-- Hibernate OpenSessionInView -->
+    <!-- Hibernate OpenSessionInView
     <filter>
         <filter-name>hibernateFilter</filter-name>
         <filter-class>ngdemo.infrastructure.AutoFlushOpenSessionInViewFilter</filter-class>
@@ -96,14 +98,17 @@
         </init-param>
         <init-param>
             <param-name>singleSession</param-name>
-            <param-value>false</param-value>
+            <param-value>true</param-value>
         </init-param>
     </filter>
 
     <filter-mapping>
         <filter-name>hibernateFilter</filter-name>
         <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
+    -->
 
     <!-- Spring framework statements  -->
     <filter>

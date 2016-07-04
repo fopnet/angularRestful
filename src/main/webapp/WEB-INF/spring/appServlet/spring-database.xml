@@ -14,6 +14,23 @@
         <property name="password" value="admin" />
     </bean>
 
+ <!--   <aop:config>
+        <aop:advisor pointcut="execution(* vn.com.vhc.cbs.dao.*.*(..))"
+                     advice-ref="txAdvice" />
+    </aop:config>
+
+    <tx:annotation-driven />
+    <tx:advice id="txAdvice">
+        <tx:attributes>
+            <tx:method name="save*" />
+            <tx:method name="update*" />
+            <tx:method name="remove*" />
+            <tx:method name="*" read-only="false" />
+        </tx:attributes>
+    </tx:advice>
+-->
+    <!-- Hibernate settiings ================================== -->
+
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
 
@@ -24,50 +41,54 @@
                     </list>
                 </property>
         -->
-            <property name="annotatedClasses">
-                <list>
-                    <value>ngdemo.domain.User</value>
-                    <value>ngdemo.domain.Profile</value>
-                    <value>ngdemo.domain.Permission</value>
-                    <value>ngdemo.domain.Subscription</value>
-                    <value>ngdemo.domain.Journal</value>
-                </list>
-            </property>
+        <property name="annotatedClasses">
+            <list>
+                <value>ngdemo.domain.User</value>
+                <value>ngdemo.domain.Profile</value>
+                <value>ngdemo.domain.Permission</value>
+                <value>ngdemo.domain.Subscription</value>
+                <value>ngdemo.domain.Journal</value>
+            </list>
+        </property>
 
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.FirebirdDialect</prop>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.format_sql">true</prop>
-                <prop key="hibernate.connection.autocommit">true</prop>
+                <!--<prop key="hibernate.connection.autocommit">true</prop>-->
+                <prop key="hibernate.transaction.auto_close_session">true</prop>
+                <!--<prop key="hibernate.connection.release_mode">auto</prop>-->
+                <prop key="hibernate.current_session_context_class">jta</prop>
+                <!--<prop key="hibernate.cache.use_query_cache">true</prop>-->
             </props>
         </property>
     </bean>
 
-    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
- <!--   <aop:config>
-        <aop:advisor pointcut="execution(* vn.com.vhc.cbs.dao.*.*(..))"
-                     advice-ref="txAdvice" />
-    </aop:config>
-
+    <tx:annotation-driven />
     <tx:advice id="txAdvice">
         <tx:attributes>
             <tx:method name="save*" />
             <tx:method name="update*" />
             <tx:method name="remove*" />
-            <tx:method name="*" read-only="true" />
+            <tx:method name="*" read-only="false" />
         </tx:attributes>
-    </tx:advice>-->
+    </tx:advice>
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateManagedSession" value="true"/>
+        <property name="rollbackOnCommitFailure" value="true"/>
+    </bean>
+
 
 
     <!-- Mock Repositories Beans =================================================================================== -->
 
    <bean id="dummyRepository" class="ngdemo.repositories.impl.mock.DummyMockRepositoryImpl" scope="singleton"/>
 
-<!--
+<!--  -->
     <bean id="userDAO" class="ngdemo.repositories.impl.mock.UserMockRepositoryImpl" scope="singleton" factory-method="getInstance"/>
 
    <bean id="journalDAO" class="ngdemo.repositories.impl.mock.JournalMockRepositoryImpl" scope="singleton" factory-method="getInstance">
@@ -78,9 +99,9 @@
        <constructor-arg ref="userDAO"/>
        <constructor-arg ref="journalDAO"/>
    </bean>
-   -->
 
-    <!-- Hibernate Repositories Beans =================================================================================== -->
+
+    <!-- Hibernate Repositories Beans ===================================================================================
 
     <bean id="userDAO"
           scope="singleton"
@@ -94,5 +115,12 @@
           scope="singleton"
           class="ngdemo.repositories.impl.hibernate.SubscriptionHibernateRepository" />
 
+    <bean name="openSessionInViewInterceptor"
+          class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+    </bean>
+    -->
 
 </beans>

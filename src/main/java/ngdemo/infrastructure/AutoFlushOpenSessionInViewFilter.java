@@ -16,6 +16,7 @@ public class AutoFlushOpenSessionInViewFilter extends OpenSessionInViewFilter {
         try {
             Session session = sessionFactory.openSession();
             session.setFlushMode(FlushMode.COMMIT); // This line changes the default behavior
+            session.setDefaultReadOnly(false);
             return session;
         } catch (HibernateException ex) {
             throw new DataAccessResourceFailureException("Could not open Hibernate Session", ex);

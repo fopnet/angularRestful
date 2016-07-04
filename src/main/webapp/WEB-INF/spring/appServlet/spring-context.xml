@@ -3,6 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
            http://www.springframework.org/schema/context
@@ -42,7 +43,6 @@
         <constructor-arg ref="userDAO"/>
     </bean>
 
-
     <!-- Resolvers  ================================================================== -->
     <!-- Configure bean to convert JSON to POJO and vice versa  -->
     <!--<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>-->
@@ -70,5 +70,6 @@
         </property>
     </bean>
 
-
+    <import resource="spring-database.xml"/>
+    <import resource="spring-security.xml"/>
 </beans>

@@ -20,6 +20,8 @@ import java.util.List;
 
 //@Singleton
 @Service("userService")
+//@org.springframework.transaction.annotation.Transactional
+//@javax.transaction.Transactional
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
