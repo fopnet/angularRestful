@@ -21,6 +21,7 @@ import java.util.List;
 
 //@Singleton
 @Service("journalService")
+@org.springframework.transaction.annotation.Transactional
 public class JournalServiceImpl implements JournalService {
 
     private final JournalRepository journalRepository;

@@ -20,8 +20,8 @@ public class SubscriptionHibernateRepository
         implements SubscriptionRepository {
 
     @Autowired
-    public SubscriptionHibernateRepository(final SessionFactory factory) {
-        super.setSessionFactory(factory);
+    public SubscriptionHibernateRepository(final SessionFactory sessionFactory) {
+        super.setSessionFactory(sessionFactory);
     }
 
     @Override

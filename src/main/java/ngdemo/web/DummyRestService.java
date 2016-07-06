@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 //@Path("/dummy")
 @RestController
 @RequestMapping("/web")
+@org.springframework.transaction.annotation.Transactional
 public class DummyRestService {
     private final DummyService dummyService;
 

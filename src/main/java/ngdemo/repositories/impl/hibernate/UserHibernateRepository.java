@@ -2,24 +2,23 @@ package ngdemo.repositories.impl.hibernate;
 
 import ngdemo.domain.User;
 import ngdemo.repositories.contract.UserRepository;
-import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by Felipe on 30/06/2016.
  */
+@SuppressWarnings({"unchecked"})
 public class UserHibernateRepository extends AbstractCrudHibernateDAO<User,Long> implements UserRepository {
 
     @Autowired
-    public UserHibernateRepository(final SessionFactory factory) {
-        super.setSessionFactory(factory);
+    public UserHibernateRepository(final SessionFactory sessionFactory) {
+        super.setSessionFactory(sessionFactory);
     }
 
     @Override
@@ -37,4 +36,5 @@ public class UserHibernateRepository extends AbstractCrudHibernateDAO<User,Long>
                 .find("from User u inner join fetch u.profile p");
         return users;
     }
+
 }

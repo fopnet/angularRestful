@@ -70,6 +70,7 @@ app.controller('UserListCtrl', ['$scope', 'UsersFactory', 'UserFactory', '$locat
             if(!$scope.$$phase){
                 $scope.$apply();
             }
+            $scope.$apply();
         });
     };
 

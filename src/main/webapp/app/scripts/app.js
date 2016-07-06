@@ -9,7 +9,7 @@ angular.module('ngdemoApp', [
 .config(function ($routeProvider, $httpProvider) {
         $routeProvider.when('/dummy', {templateUrl: 'views/user/dummy.html', controller: 'DummyCtrl'});
         $routeProvider.when('/login', {templateUrl: 'views/login/login.html', controller: 'LoginCtrl'});
-        $routeProvider.when('/user-list', {templateUrl: 'views/user/user-list.html', controller: 'UserListCtrl'});
+        $routeProvider.when('/user-list', {templateUrl: 'views/user/user-list.html', cacheable:false, controller: 'UserListCtrl'});
         $routeProvider.when('/user-detail/:id', {templateUrl: 'views/user/user-detail.html', controller: 'UserDetailCtrl'});
         $routeProvider.when('/user-creation', {templateUrl: 'views/user/user-creation.html', controller: 'UserCreationCtrl'});
         $routeProvider.when('/journal-detail/:id', {templateUrl: 'views/journal/journal-detail.html', controller: 'JournalDetailCtrl'});

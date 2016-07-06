@@ -2,7 +2,6 @@ package ngdemo.repositories.impl.hibernate;
 
 import ngdemo.domain.Journal;
 import ngdemo.repositories.contract.JournalRepository;
-import ngdemo.repositories.contract.UserRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 

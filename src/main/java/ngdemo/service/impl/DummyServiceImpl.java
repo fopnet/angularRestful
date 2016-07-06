@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 //@Singleton
 @Service("dummyService")
+@org.springframework.transaction.annotation.Transactional
 public class DummyServiceImpl implements DummyService {
 
     private final DummyRepository dummyRepository;

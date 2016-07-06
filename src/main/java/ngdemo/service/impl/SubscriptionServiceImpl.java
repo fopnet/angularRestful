@@ -16,10 +16,14 @@ import org.apache.commons.collections4.Transformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 //@Singleton
 @Service("subscriptionService")
+@org.springframework.transaction.annotation.Transactional
 public class SubscriptionServiceImpl implements SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;

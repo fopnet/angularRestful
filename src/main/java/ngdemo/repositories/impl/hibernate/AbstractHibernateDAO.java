@@ -65,4 +65,11 @@ abstract class AbstractHibernateDAO<T, PK extends Serializable>
                 .setProjection(Projections.rowCount())
                 .uniqueResult();
     }
+
+ /*   @Override
+    protected HibernateTemplate createHibernateTemplate(SessionFactory sessionFactory) {
+        HibernateTemplate hibernateTemplate = super.createHibernateTemplate(sessionFactory);
+        hibernateTemplate.getSessionFactory().openSession().setFlushMode(FlushMode.AUTO);
+        return hibernateTemplate;
+    }*/
 }
