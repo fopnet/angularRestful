@@ -16,6 +16,15 @@ public class SubscriptionID implements Serializable {
     private Long userID;
     private Long journalID;
 
+    public SubscriptionID(User user, Journal journal) {
+        this.userID = user != null ? user.getId() : null;
+        this.journalID = journal != null ? journal.getId() : null;
+    }
+
+    protected SubscriptionID() {
+
+    }
+
     public Long getUserID() {
         return userID;
     }
@@ -47,8 +56,8 @@ public class SubscriptionID implements Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .appendSuper (getJournalID().hashCode())
-                .appendSuper (getUserID().hashCode())
+                .append (getJournalID())
+                .append (getUserID())
                 .toHashCode();
     }
 }

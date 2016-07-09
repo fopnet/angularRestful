@@ -1,11 +1,15 @@
 'use strict';
 
-app.controller('JournalListCtrl', ['$scope', 'JournalsFactory', 'JournalFactory', 'UserFactory', '$location',
-  function ($scope, JournalsFactory, JournalFactory, UserFactory, $location) {
+app.controller('JournalListCtrl', ['$scope', '$timeout', 'JournalsFactory', 'JournalFactory', 'UserFactory', '$location',
+  function ($scope, $timeout, JournalsFactory, JournalFactory, UserFactory, $location) {
 
     /* callback for ng-click 'editJournal': */
     $scope.editJournal = function (journalId) {
-      $location.path('/journal-detail/' + journalId);
+       $scope.journals = [];
+
+        $timeout(function() {
+            $location.path('/journal-detail/' + journalId);
+        }, 0);
     };
 
     /* callback for ng-click 'deleteJournal': */
@@ -53,10 +57,6 @@ app.controller('JournalListCtrl', ['$scope', 'JournalsFactory', 'JournalFactory'
 
             $scope.sortJournals();
 
-            // http://stackoverflow.com/questions/25991393/how-to-update-my-total-items-in-angular-ui-pagination
-            if(!$scope.$$phase){
-                $scope.$apply();
-            }
         });
     };
 
@@ -73,8 +73,10 @@ app.controller('JournalDetailCtrl', ['$scope', '$routeParams', 'JournalFactory',
         $scope.updateJournal = function () {
             var file = $("#fileInput")[0].files[0];
 
-            JournalFactory.update($scope.journal, file);
-            $location.path('/journal-list');
+            JournalFactory.update($scope.journal, file).then(function(){
+                $location.path('/journal-list');
+            });
+
         };
 
         /* callback for ng-click 'cancel': */

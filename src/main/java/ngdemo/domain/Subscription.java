@@ -18,11 +18,14 @@ public class Subscription implements  Comparable<Subscription> , Serializable {
 
     protected Subscription () {
         ///to hibernate use
+        this.id = new SubscriptionID(null, null);
     }
 
     public Subscription (Journal j , User user) {
+        this();
         this.journal = j;
         this.subscriber = user;
+        this.id = new SubscriptionID(user, journal);
     }
 
     public Subscription (Journal j , User user, Date publicationDate) {
@@ -34,12 +37,12 @@ public class Subscription implements  Comparable<Subscription> , Serializable {
     private SubscriptionID id;
 
     @ManyToOne
-    @JoinColumn(name="JOURNALID")
+    @JoinColumn(name="JOURNALID", insertable=false, updatable=false)
     @NotNull
     private Journal journal;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="USERID")
+    @JoinColumn(name="USERID",insertable=false, updatable=false)
     @NotNull
     private User subscriber;
 
@@ -56,6 +59,7 @@ public class Subscription implements  Comparable<Subscription> , Serializable {
 
     public void setJournal(Journal journal) {
         this.journal = journal;
+        getId().setUserID(this.journal != null ? journal.getId() : null);
     }
 
     public User getSubscriber() {
@@ -64,6 +68,7 @@ public class Subscription implements  Comparable<Subscription> , Serializable {
 
     public void setSubscriber(User subscriber) {
         this.subscriber = subscriber;
+        getId().setUserID(this.subscriber != null ? subscriber.getId() : null);
     }
 
     public Date getDate() {

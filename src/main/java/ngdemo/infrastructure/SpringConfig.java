@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * Created by eii5 on 21/09/2015.
  */
-@Configuration
+//@Configuration
 //@ComponentScan({"ngdemo"})
-@EnableTransactionManagement
+//@EnableTransactionManagement
 //@ImportResource("/WEB-INF/spring/appServlet/spring-context.xml")
 public class SpringConfig {
 

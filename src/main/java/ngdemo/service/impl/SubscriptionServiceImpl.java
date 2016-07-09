@@ -46,9 +46,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         List<Subscription> userSubscription = ListUtils.select(subscriptions, new Predicate<Subscription>() {
             @Override
             public boolean evaluate(Subscription item) {
-                subscribedJournals.add(item.getJournal());
-
-                return item.getSubscriber().equals(subscriber);
+                return item.getSubscriber().equals(subscriber) &&
+                        subscribedJournals.add(item.getJournal());
             }
         });
 

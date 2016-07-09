@@ -17,12 +17,17 @@ app.filter("startFrom",function(){
     }
 });
 
-app.controller('UserListCtrl', ['$scope', 'UsersFactory', 'UserFactory', '$location',
-  function ($scope, UsersFactory, UserFactory, $location) {
+app.controller('UserListCtrl', ['$scope', '$timeout', 'UsersFactory', 'UserFactory', '$location',
+  function ($scope, $timeout, UsersFactory, UserFactory, $location) {
 
     /* callback for ng-click 'editUser': */
     $scope.editUser = function (userId) {
-      $location.path('/user-detail/' + userId);
+        $scope.users = [];
+
+        $timeout(function() {
+            $location.path('/user-detail/' + userId);
+        }, 0);
+
     };
 
     /* callback for ng-click 'deleteUser': */
@@ -55,6 +60,7 @@ app.controller('UserListCtrl', ['$scope', 'UsersFactory', 'UserFactory', '$locat
         });
     };
 
+
     $scope.listUsers = function() {
 
         UsersFactory.query().then(function(result){
@@ -65,17 +71,10 @@ app.controller('UserListCtrl', ['$scope', 'UsersFactory', 'UserFactory', '$locat
             $scope.maxSize = Math.ceil($scope.totalItems / $scope.pageSize);
 
             $scope.sortUsers();
-
-            // http://stackoverflow.com/questions/25991393/how-to-update-my-total-items-in-angular-ui-pagination
-            if(!$scope.$$phase){
-                $scope.$apply();
-            }
-            $scope.$apply();
         });
     };
 
-      // list users to grid
-    $scope.listUsers();
+     $scope.listUsers();
 
   }]);
 
@@ -84,8 +83,10 @@ app.controller('UserDetailCtrl', ['$scope', '$routeParams', 'UserFactory', '$loc
 
     /* callback for ng-click 'updateUser': */
     $scope.updateUser = function () {
-      UserFactory.update($scope.user);
-      $location.path('/user-list');
+        UserFactory.update($scope.user).then(function(){
+            $location.path('/user-list/');
+        });
+
     };
 
     /* callback for ng-click 'cancel': */

@@ -6,7 +6,7 @@
         </div>
     </form>
 
-  <table class="table table-striped table-condensed">
+  <table class="table table-striped table-condensed"  id="tbl" >
     <thead>
       <tr>
         <th  ng-click="setKeyName('firstName')" style="min-width: 80px;" >First name
@@ -21,7 +21,7 @@
         <th style="width:20px;">&nbsp;</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="tblcontent">
      <tr ng-repeat="user in users |orderBy:sortKey:reverse | filter:search | startFrom:(currentPage - 1) * pageSize|limitTo: pageSize">
         <td>{{ user.firstName }}</td>
         <td>{{ user.lastName }}</td>
