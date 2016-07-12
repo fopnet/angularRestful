@@ -91,9 +91,9 @@ app.controller('JournalDetailCtrl', ['$scope', '$routeParams', 'JournalFactory',
         $scope.journal = JournalFactory.show({id: $routeParams.id});
     }]);
 
-app.controller('JournalCreationCtrl', ['$scope', 'JournalsFactory', '$location', '$locale',
-  function ($scope, JournalsFactory, $location, $locale) {
-    $scope.localeID = $locale.ID;
+app.controller('JournalCreationCtrl', ['$scope', 'JournalsFactory', '$location',
+  function ($scope, JournalsFactory, $location) {
+//    $scope.localeID = $locale.ID;
 
     /* callback for ng-click 'createNewJournal': */
     $scope.createNewJournal = function () {

@@ -18,7 +18,7 @@
 <script src="bower_components/json3/lib/json3.min.js"></script>
 <![endif]-->
 
-<ul class="menu">
+<ul class="menu" ng-controller="LoginCtrl">
     <li><a href="#/dummy">dummy</a></li>
     <li><a href="#/user-list">user-list</a></li>
     <li><a href="#/user-detail/1">user-detail/1</a></li>
@@ -28,11 +28,20 @@
     <li><a href="#/journal-creation">journal-creation</a></li>
     <li><a href="#/journal-detail/1">journal-detail/1</a></li>
     <li><a href="#/subscription-list">subscription-list</a></li>
+    <li></li>
+    <li ng-show="authenticated"><a href="#" ng-click="logout()">logout</a></li>
 </ul>
 
-<!-- Add your site or application content here -->
-<div class="container" ng-view=""></div>
+<div class="jumbotron">
+    <div class="container">
+        <div class="col-sm-8 col-sm-offset-2">
+            <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
 
+            <!-- Add your site or application content here -->
+            <div class="container" ng-view=""></div>
+        </div>
+    </div>
+</div>
 
 </body>
 
@@ -44,8 +53,8 @@
     <meta name="viewport" content="width=device-width">
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="shortcut icon" type="image/png" href="favicon.ico"/>
-    <link rel="icon" type="image/png" href="favicon.ico"/>
+    <link rel="shortcut icon" type="image/png" href="images/favicon.ico"/>
+    <link rel="icon" type="image/png" href="images/favicon.ico"/>
 
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
@@ -66,6 +75,7 @@
 <script src="bower_components/angular-resource/angular-resource.js"></script>
 <script src="bower_components/angular-cookies/angular-cookies.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-base64/angular-base64.min.js"></script>
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app.js"></script>
@@ -74,6 +84,8 @@
 <script src="scripts/services/services.js"></script>
 <script src="scripts/services/userService.js"></script>
 <script src="scripts/services/subscriptionService.js"></script>
+<script src="scripts/services/authenticationService.js"></script>
+<script src="scripts/services/flashservice.js"></script>
 
 <!-- Controllers ====================================-->
 <script src="scripts/services/journalService.js"></script>

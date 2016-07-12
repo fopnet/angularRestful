@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bean:beans
-        xmlns:bean="http://www.springframework.org/schema/beans"
+<beans xmlns="http://www.springframework.org/schema/beans"
         xmlns:sec="http://www.springframework.org/schema/security"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/security"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-	                         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	                         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
     <!--
     Applies to root appContext beans only, for MVC Controllers is this declaration repeated in MVC config.
@@ -13,41 +12,118 @@
     need to add proxy-target-class="true" as well. Book "Spring Security 3.1", Chapter 10, Fine-grained
     Access Control, from header "Method security on Spring MVC controllers" on discusses these topics.
     -->
-    <global-method-security secured-annotations="enabled" />
+    <sec:global-method-security secured-annotations="enabled" />
 
-    <http auto-config="true" use-expressions="true" disable-url-rewriting="false" realm="access permission is required.">
-        <csrf disabled="true"/>
-        <intercept-url pattern="/app/**" access="permitAll"/>
-        <intercept-url pattern="/web/**" access="permitAll"/>
-        <!--<intercept-url pattern="/app/web/**" access="hasRole('ROLE_AUTHENTICATION')"  />-->
-        <sec:http-basic />
-    </http>
+    <!--
+        Similar to filters=”none”, this will also completely disable the Security filter chain for that request path –
+        so when the request is handled in the application, Spring Security features will not be available.
+    -->
+    <sec:http security="none" pattern="/app/styles/**"/>
+    <sec:http security="none" pattern="/app/bower_components/**"/>
+    <sec:http security="none" pattern="/app/images/**"/>
+    <sec:http security="none" pattern="/login"  />
+    <!--<sec:http security="none" pattern="/user-creation"  />-->
+    <sec:http security="none" pattern="/web/users/authenticate" />
+
+    <!-- Rest Services -->
+    <sec:http entry-point-ref="restAuthenticationEntryPoint" pattern="/web/**">
+        <sec:intercept-url pattern="/web/journals/**"       access="hasRole('ROLE_PUBLISHER')"/>
+        <sec:intercept-url pattern="/web/subscriptions/**"  access="hasRole('ROLE_PUBLIC')"/>
+        <sec:intercept-url pattern="/web/users/"            access="permitAll" method="POST"/>
+        <sec:intercept-url pattern="/web/users/**"          access="hasRole('ROLE_PUBLISHER')" method="DELETE"/>
+        <sec:intercept-url pattern="/web/users/**"          access="hasRole('ROLE_PUBLISHER')" method="GET"/>
+        <sec:intercept-url pattern="/web/users/**"          access="hasRole('ROLE_PUBLISHER')" method="PUT"/>
+
+        <sec:csrf disabled="true"/>
+        <!--<sec:custom-filter ref="authenticationTokenProcessingFilter" position="PRE_AUTH_FILTER" />-->
+        <sec:form-login
+                authentication-success-handler-ref="mySuccessHandler"
+                authentication-failure-handler-ref="myFailureHandler"
+                />
+
+        <sec:logout />
+    </sec:http>
 
 <!--
+    <sec:http auto-config="false"  use-expressions="true"
+              create-session="never"
+              disable-url-rewriting="false" realm="access permission is required.">
+        <sec:csrf disabled="false" token-repository-ref="csrfTokenRepository"/>
+        &lt;!&ndash;Services&ndash;&gt;
+        &lt;!&ndash;Pages&ndash;&gt;
+        <sec:intercept-url pattern="/dummy/" access="permitAll"/>
+        <sec:intercept-url pattern="/journal-*/" access="hasRole('ROLE_PUBLISHER')"/>
+        <sec:intercept-url pattern="/user-*/" access="hasRole('ROLE_PUBLISHER')"/>
+        <sec:intercept-url pattern="/subscription-*/" access="hasRole('ROLE_PUBLIC')"/>
 
-    <http use-expressions="true">
-        <intercept-url pattern="/**" access="authenticated"/>
-        <logout
-                logout-success-url="/login?logout"
-                logout-url="/logout"
-                />
-        <form-login
+        <sec:logout
+                logout-success-url="/login"
+                logout-url="/web/users/logout"/>
+
+        <sec:form-login
                 authentication-failure-url="/login?error"
                 login-page="/login"
-                login-processing-url="/login"
+                login-processing-url="/web/users/authenticate"
                 password-parameter="password"
                 username-parameter="username"
                 />
-    </http>
+    </sec:http>
+
 -->
 
-    <authentication-manager>
-        <authentication-provider>
-            <user-service>
-                <user name="admin" password="admin" authorities="ROLE_USER"/>
-            </user-service>
-        </authentication-provider>
-    </authentication-manager>
+    <sec:authentication-manager>
+        <sec:authentication-provider user-service-ref="userService"/>
+    </sec:authentication-manager>
 
+    <!--<sec:authentication-manager>
+        <sec:authentication-provider>
+            <sec:user-service>
+                <sec:user name="admin" password="admin" authorities="ROLE_USER"/>
+            </sec:user-service>
+        </sec:authentication-provider>
+    </sec:authentication-manager>-->
 
-</bean:beans>
+    <!-- Beans ===============================================================================================-->
+    <bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository">
+        <property name="headerName" value="X-XSRF-TOKEN" />
+    </bean>
+
+    <!-- Entry pointers -->
+    <bean id="restAuthenticationEntryPoint" class="ngdemo.infrastructure.security.RestAuthenticationEntryPoint">
+    </bean>
+
+    <bean id="mySuccessHandler"
+                class="ngdemo.infrastructure.security.MySavedRequestAwareAuthenticationSuccessHandler"/>
+    <bean id="myFailureHandler" class=
+            "org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"/>
+
+    <!--
+        <bean id="defaultEntryPoint"
+              class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+            <property name="realmName" value="My webservices"/>
+        </bean>
+
+        <bean id="ajaxEntyPoint"
+              class="org.springframework.security.web.authentication.HttpStatusEntryPoint">
+            <constructor-arg name="httpStatus"
+                             value="#{T(org.springframework.http.HttpStatus).UNAUTHORIZED}"/>
+        </bean>
+
+        <bean id="entryPoint"
+              class="org.springframework.security.web.authentication.DelegatingAuthenticationEntryPoint">
+            <constructor-arg>
+                <util:map map-class="java.util.LinkedHashMap" >
+                    <entry key="hasHeader('X-Requested-With','XMLHttpRequest')"
+                           value-ref="ajaxEntyPoint" />
+                </util:map>
+            </constructor-arg>
+            <property name="defaultEntryPoint" ref="defaultEntryPoint"/>
+        </bean>-->
+
+   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+       <property name="location">
+           <value>classpath:application.properties</value>
+       </property>
+   </bean>
+
+</beans>

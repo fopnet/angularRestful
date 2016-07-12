@@ -1,4 +1,4 @@
-package ngdemo.infrastructure;
+package ngdemo.infrastructure.security;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,13 +20,13 @@ import java.io.IOException;
 /**
  * Created by Felipe on 29/06/2016.
  */
-//	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+//@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 //@Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().and().authorizeRequests()
-                .antMatchers("/index.html", "/home.html", "/login.html", "/dummy.html" ,"/").permitAll().anyRequest()
+                .antMatchers("/index.html", "/login", "/dummy.html").permitAll().anyRequest()
                 .authenticated().and().csrf()
                 .csrfTokenRepository(csrfTokenRepository()).and()
                 .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);

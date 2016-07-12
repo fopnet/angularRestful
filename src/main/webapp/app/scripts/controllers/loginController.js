@@ -1,33 +1,43 @@
 'use strict';
 
-app.controller('LoginCtrl', ['$scope', '$location', 'UserFactory',
-  function ($scope, $location, UserFactory ) {
+app.controller('LoginCtrl', ['$scope','$rootScope', '$location', '$base64', 'UserFactory', 'AuthenticationService', 'FlashService',
+  function ($scope, $rootScope, $location, $base64, UserFactory , AuthenticationService, FlashService) {
       var vm = this;
 
-      vm.dataLoading = false;
+      $scope.dataLoading = false;
+      $scope.email = '';
+      $scope.password = '';
 
      ($scope.initController = function() {
           // reset login status
-          // AuthenticationService.ClearCredentials();
+          AuthenticationService.ClearCredentials();
      });
 
     $scope.login = function () {
-        vm.dataLoading = true;
+        $scope.dataLoading = true;
 
-        /*AuthenticationService.Login(vm.username, vm.password, function (response) {
-            if (response.success) {
-                AuthenticationService.SetCredentials(vm.username, vm.password);
-                $location.path('/');
-            } else {
-                FlashService.Error(response.message);
-                vm.dataLoading = false;
+        AuthenticationService.Login($scope.email, $scope.password,
+            function (response) {
+                $location.path('/dummy/');
+            },
+            function (response) {
+                $scope.dataLoading = false;
+                AuthenticationService.ClearCredentials();
+
+                FlashService.Error(response);
             }
-        });*/
+        );
     };
 
     /* callback for ng-click 'createJournal': */
     $scope.register = function () {
       $location.path('/user-creation');
+    };
+
+    $scope.logout = function() {
+        AuthenticationService.Logout().then(function(){
+            $location.path("/login");
+        })
     };
 
   }]);

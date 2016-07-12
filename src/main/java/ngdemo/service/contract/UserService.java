@@ -18,5 +18,5 @@ public interface UserService {
 
     int getNumberOfUsers();
 
-    User login(User user);
+    org.springframework.security.core.Authentication login(String email, String password);
 }

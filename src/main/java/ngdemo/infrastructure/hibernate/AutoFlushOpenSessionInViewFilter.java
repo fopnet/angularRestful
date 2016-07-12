@@ -1,4 +1,4 @@
-package ngdemo.infrastructure;
+package ngdemo.infrastructure.hibernate;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
