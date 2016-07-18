@@ -6,6 +6,7 @@ import ngdemo.domain.User;
 import ngdemo.service.contract.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,20 +34,22 @@ public class UserRestService {
     }
 
     @RequestMapping(value = "/numberOfUsers",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
-    @Secured("ROLE_PUBLISHER")
-    public int getNumberOfUsers() {
-        int total = userService.getNumberOfUsers();
+//    @Secured("ROLE_PUBLISHER")
+//    @PreAuthorize("hasRole('ROLE_PUBLISHER')")
+    public Long getNumberOfUsers() {
+        Long total = userService.getNumberOfUsers();
         return  total;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
-    @Secured("ROLE_PUBLISHER")
+//    @Secured("ROLE_PUBLISHER")
+//    @PreAuthorize("hasRole('ROLE_PUBLISHER')")
     public List<User> getAllUsersInJSON() {
         return userService.getAllUsers();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
-    @Secured("ROLE_PUBLISHER")
+//    @Secured("ROLE_PUBLISHER")
     public User getUserById(@PathVariable("id") Long id) {
         return userService.getById(id);
     }
@@ -66,7 +69,7 @@ public class UserRestService {
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    @Produces(MediaType.APPLICATION_JSON)
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
-    @Secured("ROLE_PUBLISHER")
+//    @Secured("ROLE_PUBLISHER")
     public User update(@RequestBody User user) {
         return userService.update(user);
     }
@@ -75,7 +78,7 @@ public class UserRestService {
 //    @Path("{id}")
 //    @Produces(MediaType.APPLICATION_JSON)
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON)
-    @Secured("ROLE_PUBLISHER")
+//    @Secured("ROLE_PUBLISHER")
     public User remove(@PathVariable("id") Long id) {
         return userService.remove(id);
     }

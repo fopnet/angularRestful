@@ -16,7 +16,7 @@ public interface UserService {
 
     User remove(Long id);
 
-    int getNumberOfUsers();
+    Long getNumberOfUsers();
 
     org.springframework.security.core.Authentication login(String email, String password);
 }

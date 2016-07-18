@@ -18,7 +18,7 @@ public abstract class GenericMockRepository<T, PK extends Serializable> implemen
     }
 
     @Override
-    public int getCount() {
+    public Long getCount() {
         throw new UnsupportedOperationException("getCount method needs to be implemented.");
     }
 

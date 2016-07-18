@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public int getNumberOfUsers() {
+    public Long getNumberOfUsers() {
         return this.userRepository.getCount();
     }
 

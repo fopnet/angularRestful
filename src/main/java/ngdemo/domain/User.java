@@ -36,8 +36,8 @@ public class User implements Serializable  {
     private String lastName;
 
     @Column(name = "PASSWORD")
-    @NotEmpty
-    @Length(max = 10)
+//    @NotEmpty
+//    @Length(max = 10)
     private String password;
 
     @NotEmpty

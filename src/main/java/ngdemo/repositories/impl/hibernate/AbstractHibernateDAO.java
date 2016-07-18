@@ -57,8 +57,8 @@ abstract class AbstractHibernateDAO<T, PK extends Serializable>
     }
 
     @Override
-    public int getCount() {
-        return (int) getHibernateTemplate()
+    public Long getCount() {
+        return (Long) getHibernateTemplate()
                 .getSessionFactory()
                 .getCurrentSession()
                 .createCriteria(getWildcard())

@@ -9,5 +9,5 @@ public interface Repository<T, PK extends Serializable> {
 
     T getById(PK id);
 
-    int getCount();
+    Long getCount();
 }

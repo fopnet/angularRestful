@@ -25,6 +25,7 @@ public class SubscriptionHibernateRepository
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Subscription> getAllBySubscriber(User subscriber) {
         List subbscritions = getHibernateTemplate()
                 .findByCriteria(DetachedCriteria.forClass(getWildcard())

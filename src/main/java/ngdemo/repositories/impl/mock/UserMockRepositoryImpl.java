@@ -94,8 +94,8 @@ public class UserMockRepositoryImpl extends GenericMockRepository<User,Long> imp
     }
 
     @Override
-    public int getCount() {
-        return this.users.size();
+    public Long getCount() {
+        return new Long(this.users.size());
     }
 
     private void createUsers() {

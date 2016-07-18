@@ -12,7 +12,16 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/../session-managers-1.2.0.RELEASE/pom.xml" />
+        <option value="$PROJECT_DIR$/../springone-spa-backend/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/../session-managers-1.2.0.RELEASE/common/pom.xml" />
+        <option value="$PROJECT_DIR$/../session-managers-1.2.0.RELEASE/pom.xml" />
+        <option value="$PROJECT_DIR$/../session-managers-1.2.0.RELEASE/redis-store/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">

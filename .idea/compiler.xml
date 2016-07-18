@@ -22,11 +22,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="common" />
         <module name="ngdemo" />
+        <module name="redis-store" />
+        <module name="spa-backend" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
+      <module name="common" target="1.8" />
       <module name="ngdemo" target="1.8" />
+      <module name="redis-store" target="1.8" />
+      <module name="spa-backend" target="1.7" />
       <module name="SpringSecurityCustomAuthenticationProvider" target="1.7" />
     </bytecodeTargetLevel>
   </component>

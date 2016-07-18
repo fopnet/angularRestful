@@ -1,17 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
         xmlns:sec="http://www.springframework.org/schema/security"
+        xmlns:context="http://www.springframework.org/schema/context"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-	                         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+	                         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd
+	                         http://www.springframework.org/schema/context
+                             http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+
+    <!-- Rest Services -->
+    <sec:http entry-point-ref="restAuthenticationEntryPoint"  pattern="/web/**">
+        <sec:intercept-url pattern="/web/journals/**"       access="hasRole('ROLE_PUBLISHER')"/>
+        <sec:intercept-url pattern="/web/subscriptions/**"  access="hasRole('ROLE_PUBLIC')"/>
+        <sec:intercept-url pattern="/web/users/"            access="permitAll" method="POST"/>
+        <sec:intercept-url pattern="/web/users/**"          access="hasRole('ROLE_PUBLISHER')" method="DELETE"/>
+        <sec:intercept-url pattern="/web/users/**"          access="hasRole('ROLE_PUBLISHER')" method="GET"/>
+        <sec:intercept-url pattern="/web/users/**"          access="hasRole('ROLE_PUBLISHER')" method="PUT"/>
+
+<!--        <sec:session-management>
+            <sec:concurrency-control max-sessions="1" />
+        </sec:session-management>-->
+
+        <sec:csrf disabled="true"/>
+        <!--<sec:custom-filter ref="authenticationTokenProcessingFilter" position="PRE_AUTH_FILTER" />-->
+        <sec:form-login
+                authentication-success-handler-ref="mySuccessHandler"
+                authentication-failure-handler-ref="myFailureHandler"
+                />
+
+        <sec:logout />
+    </sec:http>
 
     <!--
-    Applies to root appContext beans only, for MVC Controllers is this declaration repeated in MVC config.
-    Actually, we currently don't need this as we have on annotation outside of MVC.
-    There is more here that can go wrong. If you use interface-based proxy (our demo uses CGLib), you may
-    need to add proxy-target-class="true" as well. Book "Spring Security 3.1", Chapter 10, Fine-grained
-    Access Control, from header "Method security on Spring MVC controllers" on discusses these topics.
-    -->
+     Applies to root appContext beans only, for MVC Controllers is this declaration repeated in MVC config.
+     Actually, we currently don't need this as we have on annotation outside of MVC.
+     There is more here that can go wrong. If you use interface-based proxy (our demo uses CGLib), you may
+     need to add proxy-target-class="true" as well. Book "Spring Security 3.1", Chapter 10, Fine-grained
+     Access Control, from header "Method security on Spring MVC controllers" on discusses these topics.
+     -->
     <sec:global-method-security secured-annotations="enabled" />
 
     <!--
@@ -24,25 +51,6 @@
     <sec:http security="none" pattern="/login"  />
     <!--<sec:http security="none" pattern="/user-creation"  />-->
     <sec:http security="none" pattern="/web/users/authenticate" />
-
-    <!-- Rest Services -->
-    <sec:http entry-point-ref="restAuthenticationEntryPoint" pattern="/web/**">
-        <sec:intercept-url pattern="/web/journals/**"       access="hasRole('ROLE_PUBLISHER')"/>
-        <sec:intercept-url pattern="/web/subscriptions/**"  access="hasRole('ROLE_PUBLIC')"/>
-        <sec:intercept-url pattern="/web/users/"            access="permitAll" method="POST"/>
-        <sec:intercept-url pattern="/web/users/**"          access="hasRole('ROLE_PUBLISHER')" method="DELETE"/>
-        <sec:intercept-url pattern="/web/users/**"          access="hasRole('ROLE_PUBLISHER')" method="GET"/>
-        <sec:intercept-url pattern="/web/users/**"          access="hasRole('ROLE_PUBLISHER')" method="PUT"/>
-
-        <sec:csrf disabled="true"/>
-        <!--<sec:custom-filter ref="authenticationTokenProcessingFilter" position="PRE_AUTH_FILTER" />-->
-        <sec:form-login
-                authentication-success-handler-ref="mySuccessHandler"
-                authentication-failure-handler-ref="myFailureHandler"
-                />
-
-        <sec:logout />
-    </sec:http>
 
 <!--
     <sec:http auto-config="false"  use-expressions="true"
@@ -84,6 +92,16 @@
     </sec:authentication-manager>-->
 
     <!-- Beans ===============================================================================================-->
+<!--
+    <bean id="securityContextPersistenceFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
+        <constructor-arg name="repo">
+            <bean class='org.springframework.security.web.context.HttpSessionSecurityContextRepository'>
+                <property name='allowSessionCreation' value="false" />
+            </bean>
+        </constructor-arg>
+    </bean>
+-->
+
     <bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository">
         <property name="headerName" value="X-XSRF-TOKEN" />
     </bean>
@@ -98,32 +116,46 @@
             "org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"/>
 
     <!--
-        <bean id="defaultEntryPoint"
-              class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
-            <property name="realmName" value="My webservices"/>
-        </bean>
+     <bean id="defaultEntryPoint"
+           class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+         <property name="realmName" value="My webservices"/>
+     </bean>
 
-        <bean id="ajaxEntyPoint"
-              class="org.springframework.security.web.authentication.HttpStatusEntryPoint">
-            <constructor-arg name="httpStatus"
-                             value="#{T(org.springframework.http.HttpStatus).UNAUTHORIZED}"/>
-        </bean>
+     <bean id="ajaxEntyPoint"
+           class="org.springframework.security.web.authentication.HttpStatusEntryPoint">
+         <constructor-arg name="httpStatus"
+                          value="#{T(org.springframework.http.HttpStatus).UNAUTHORIZED}"/>
+     </bean>
 
-        <bean id="entryPoint"
-              class="org.springframework.security.web.authentication.DelegatingAuthenticationEntryPoint">
-            <constructor-arg>
-                <util:map map-class="java.util.LinkedHashMap" >
-                    <entry key="hasHeader('X-Requested-With','XMLHttpRequest')"
-                           value-ref="ajaxEntyPoint" />
-                </util:map>
-            </constructor-arg>
-            <property name="defaultEntryPoint" ref="defaultEntryPoint"/>
-        </bean>-->
+     <bean id="entryPoint"
+           class="org.springframework.security.web.authentication.DelegatingAuthenticationEntryPoint">
+         <constructor-arg>
+             <util:map map-class="java.util.LinkedHashMap" >
+                 <entry key="hasHeader('X-Requested-With','XMLHttpRequest')"
+                        value-ref="ajaxEntyPoint" />
+             </util:map>
+         </constructor-arg>
+         <property name="defaultEntryPoint" ref="defaultEntryPoint"/>
+     </bean>-->
 
-   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-       <property name="location">
-           <value>classpath:application.properties</value>
-       </property>
-   </bean>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>classpath:application.properties</value>
+        </property>
+    </bean>
+
+    <!--Redis HttpSession & RESTful APIs ============================================================================-->
+    <!-- We use the combination of <context:annotation-config/> and RedisHttpSessionConfiguration
+     	because Spring Session does not yet provide XML Namespace support (see gh-104).
+     	This creates a Spring Bean with the name of springSessionRepositoryFilter that implements Filter.
+     	The filter is what is in charge of replacing the HttpSession implementation to be backed by Spring Session.
+     	In this instance Spring Session is backed by Redis.
+    -->
+    <context:annotation-config/>
+
+    <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/>
+
+    <bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"/>
+
 
 </beans>

@@ -31,7 +31,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus( HttpServletResponse.SC_UNAUTHORIZED );
 
         if (SecurityContextHolder.getContext() != null)
-            logger.info( SecurityContextHolder.getContext().getAuthentication() );
+            logger.debug( SecurityContextHolder.getContext().getAuthentication() );
 
 
     }

@@ -114,6 +114,12 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <listener>
+        <listener-class>
+            org.springframework.security.web.session.HttpSessionEventPublisher
+        </listener-class>
+    </listener>
+
     <!-- Filters ========================================================================================= -->
 
     <!-- Spring framework statements  -->
@@ -134,8 +140,12 @@
     <filter-mapping>
         <filter-name>hibernateFilter</filter-name>
         <url-pattern>/*</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
 
+    <!--The Filter is defined with an @Order so that it is definitely applied before the main Spring Security filter.
+        With that change to the resource server, we should be able to re-launch it and get our greeting in the UI.-->
     <filter>
         <filter-name>responseCorsFilter</filter-name>
         <filter-class>ngdemo.web.ResponseCorsFilter</filter-class>
@@ -146,6 +156,8 @@
         <url-pattern>/web/*</url-pattern>
     </filter-mapping>
 
+
+    <!--Spring security filter-->
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -158,6 +170,7 @@
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
 
+    <!--Spring security CsrfHeaderFilter using cookie mode authentication
     <filter>
         <filter-name>csrfHeaderFilter</filter-name>
         <filter-class>ngdemo.infrastructure.security.CsrfHeaderFilter</filter-class>
@@ -167,5 +180,8 @@
         <filter-name>csrfHeaderFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    -->
+
+
 
 </web-app>
